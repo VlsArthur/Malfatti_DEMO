@@ -1,6 +1,7 @@
 # Malfatti (DEMO)
 
 Trabalho de conclusão de curso técnico de desenvolvimento de sistemas pelo SENAI CTTI
+Integrantes do grupo: Ana clara Vitória da Silva Santana, Arthur Vinícius Nunes Veríssimo, Gustavo Oliveira Melo, Matheus Nunes Ribeiro, Rayra Carvalho de Souza. 
 
 O **Malfatti** é uma plataforma em desenvolvimento que tem como propósito aproximar **artistas, leigos e empresas**, oferecendo um espaço seguro e prático para a realização de **comissões particulares, contratos formais** e até mesmo **grandes eventos**. A proposta é criar um ambiente que facilite a **conexão entre artistas e clientes**, reduzindo barreiras de comunicação e garantindo mais **segurança e organização** nas negociações. 
 
