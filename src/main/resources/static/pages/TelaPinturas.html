@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plataforma de Artes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+<body>
+
+ <style>
+      .banner {
+      background-image: url('../imagens/CapaDeus.png');
+      background-size: cover;
+      background-position: center;
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 20px;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+  .categoria-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+    .categoria-btn {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    @media (max-width: 992px) {
+      .categoria-container {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .categoria-container {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      }
+      
+      .categoria-btn {
+        padding: 6px 8px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .categoria-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .categoria-btn {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .categoria-container {
+        grid-template-columns: 1fr;
+      }
+    }
+        
+
+    .artist-img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .publicar-section {
+      background-image: url('../imagens/pixacao.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .publicar-section .btn {
+      margin-top: 20px;
+    }
+
+    .img-vertical {
+      height: 300px;
+      object-fit: cover;
+    }
+
+    .scrolling-wrapper {
+      overflow-x: auto;
+      scrollbar-width: none; /* Para Firefox */
+      -ms-overflow-style: none; /* Para IE e Edge */
+    }
+
+    .scrolling-wrapper::-webkit-scrollbar {
+     display: none; /* Para Chrome, Safari e Opera */
+    }
+
+    .carousel-inner img {
+      height: 200px; 
+      object-fit: cover;
+    }
+
+    .navbar-nav .nav-link {
+     transition: color 0.3s ease, transform 0.3s ease;
+    }       
+
+    .navbar-nav .nav-link:hover {
+      color: #007bff;
+      transform: translateY(-2px);
+      font-weight: 500;
+    }
+
+    .icon-hover svg,
+    .navbar a.text-dark svg {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .icon-hover:hover svg,
+    .navbar a.text-dark:hover svg {
+      transform: scale(1.2);
+      color: #007bff;
+    }
+
+    .premium-section h2 {
+      font-size: 2rem;
+    }
+
+    .premium-section ul li {
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .premium-section .card-float {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      border-radius: 15px;
+      background-color: white;
+    }
+
+    .premium-section .card-float:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-assine {
+      background-color: #0d6efd;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .plano-card {
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: white;
+    }
+
+    .plano-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(255, 249, 249, 0.5);
+    }
+
+    .plano-card ul li {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .premium-section {
+      background: linear-gradient(135deg, #26b7f5, #86d2ec, #2c5364);
+      padding: 80px 0;
+    }
+
+    .plano-card {
+      background-color: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .plano-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+      border-color: #17c1e8;
+    }
+
+    .plano-card h4 {
+      font-size: 1.8rem;
+      color: #6e6e6e;
+    }
+
+    .plano-card ul li {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    .plano-card h3 {
+      font-size: 1.8rem;
+      background: linear-gradient(90deg, #17e817, #05c4ff);
+      -webkit-background-clip: text;
+    }
+
+    .btn-assinar {
+      margin-top: 15px;
+      font-weight: bold;
+      border-radius: 30px;
+      padding: 12px 30px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-assinar:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-basic {
+      background-color: transparent;
+      border: 2px solid #17c1e8;
+      color: #17c1e8;
+    }
+
+    .btn-basic:hover {
+      background-color: #17c1e8;
+      color: #fff;
+    }
+
+    .btn-premium {
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-premium:hover {
+      background: linear-gradient(90deg, #ee0979, #ff6a00);
+    }
+
+    .dropdown-toggle::after {
+        display: none !important;
+    }
+
+    .img-circular {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  
+  </style>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4" style="background-color: #ffffff;">
+  <div class="container-fluid">
+
+    <!-- Logo + Nome -->
+    <a class="navbar-brand d-flex align-items-center me-4" href="#">
+      <img src="../imagens/logoNavBar.png" alt="Logo" style="width: 35px; margin-right: 10px;">
+      <span class="fw-bold">Malfatti</span>
+    </a>
+
+    <!-- Botão hamburguer responsivo -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menu da navbar -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Itens alinhados à esquerda -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="TelaInicial.html">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Eventos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Artistas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Obras</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Entrar</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Criar conta</a></li>
+      </ul>
+
+      <!-- Pesquisa -->
+      <form class="d-flex me-3" role="search">
+        <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+      </form>
+
+      <!-- Ícones: Perfil e Carrinho -->
+      <div class="d-flex align-items-center gap-3">
+
+        <!-- Ícone de Perfil com Dropdown -->
+        <div class="dropdown">
+          <a class="text-dark dropdown-toggle" href="#" role="button" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 10c-1.105 0-2 .672-2 1.5S9.895 13 11 13s2-.672 2-1.5S12.105 10 11 10zm-2-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1c-2.21 0-4 1.343-4 3h8c0-1.657-1.79-3-4-3z"/>
+              <path fill-rule="evenodd" d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownPerfil">
+            <li><a class="dropdown-item" href="PerfilUsuario.html">Usuário</a></li>
+            <li><a class="dropdown-item" href="PerfilArtista.html">Artista</a></li>
+          </ul>
+        </div>
+
+        <!-- Ícone de Carrinho -->
+        <a href="#" class="text-dark">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+            class="bi bi-cart3" viewBox="0 0 16 16">
+            <path
+              d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+          </svg>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- Banner -->
+<div class="banner">
+  <h1>Descubra, siga e valorize artistas do mundo inteiro</h1>
+  <p>Música, Cinema, Literatura, Artes Visuais e muito mais</p>
+  <a href="#" class="btn btn-primary btn-lg">Comece a Explorar</a>
+</div>
+
+
+
+  <!-- Categoria -->
+<div class="container my-5">
+    <h4 class="mb-3">Categorias de Artes</h4>
+    <div class="categorias-wrapper">
+        <div class="categoria-container" id="categoriaContainer">
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaFotografia.html'">Fotografias</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaMusica.html'">Música</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaDanca.html'">Dança</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Literatura</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaCinema.html'">Cinema</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaTeatro.html'">Teatro</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaEscultura.html'">Escultura</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='.html'">Pinturas</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Modelos</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Design</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Pinturas</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Desenhos</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Cêramica</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Arquitetura</button>
+           
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Recomendações de Pinturas com Carrossel Horizontal -->
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Recomendações de Obras</h4>
+    <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto">
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/inSunnySpain.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">In Sunny Spain</h6>
+        <p class="card-text">Louis Wain</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/operarios.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">Os Operários</h6>
+        <p class="card-text">Tarsila do Amaral</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/redencaoCam.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">A Redenção de Cam</h6>
+        <p class="card-text">Modesto Brocos</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/meninosBrincando.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">Meninos Pulando com o Bode</h6>
+        <p class="card-text">Cândido Portinari</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/joanna.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">The Execution of Joan of Arc</h6>
+        <p class="card-text">Hermann Anton Stilke</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/bodasCana.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">As Bodas de Caná</h6>
+        <p class="card-text">Paolo Veronese</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Pintores Recomendados - Carrossel Horizontal -->
+ <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="mb-0">Recomendações de Artistas </h4>
+      <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+ 
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto text-center">
+
+    <div card me-3 style="min-width: 300px;">
+      <img src="../imagens/anitaMalfatti.jpg" class="img-circular">
+      <p class="mt-2">Anita Malfatti</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/rosana.jpg" class="img-circular">
+      <p class="mt-2">Rosana Paulino</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/leonardoVinci.jpg" class="img-circular">
+      <p class="mt-2">Leonardo DaVinci</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/vik.jpg" class="img-circular">
+      <p class="mt-2">Vik Muniz</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/nina.jpeg" class="img-circular">
+      <p class="mt-2">Nina Horikawa</p>
+    </div>
+
+     <div class="me-3">
+      <img src="../imagens/beatriz.jpg" class="img-circular">
+      <p class="mt-2">Beatriz Milhazes</p>
+    </div>
+  </div>
+</div>
+
+<!-- Recomendações de literatura com Carrossel Horizontal -->
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Obras Premiadas</h4>
+    <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto">
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/monalisa.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">Monalisa</h6>
+        <p class="card-text">Leonardo da Vinci</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/beijoGustav.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">O Beijo</h6>
+        <p class="card-text">Gustav Klimt</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/grito.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">O Grito</h6>
+        <p class="card-text">Edvard Munch</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/persistênciaMemoria.webp" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">A Persistência da Memória</h6>
+        <p class="card-text">Salvador Dalí</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/fuzilamento3Maio.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">Os Fuzilamentos de Três de Maio</h6>
+        <p class="card-text">Francisco de Goya</p>
+      </div>
+    </div>
+
+    <div class="card me-3" style="min-width: 250px;">
+      <img src="../imagens/brincoPerola.jpg" style="width: 100%; height: 250px; object-fit: cover;">
+      <div class="card-body text-center">
+        <h6 class="card-title">Moça com Brinco de Pérola</h6>
+        <p class="card-text">Johannes Vermeer</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Dá espaços ao container-->
+<div class="container-fluid mt-5"></div>
+
+<!-- Artistas Recomendados - Carrossel Horizontal -->
+ <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="mb-0">Categoria de Obras </h4>
+      <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+  
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto text-center">
+
+    <div class="me-3">
+      <img src="../imagens/retrato.jpg" class="img-circular" >
+      <p class="mt-2">Retrato</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/paisagem.jpg"  class="img-circular">
+      <p class="mt-2">Paisagem</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/urbano.jpg"  class="img-circular">
+      <p class="mt-2">Urbana</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/abstrato.webp"  class="img-circular">
+      <p class="mt-2">Abstrata</p>
+    </div>
+
+      <div class="me-3">
+      <img src="../imagens/animalista.jpg"  class="img-circular">
+      <p class="mt-2">Animalista</p>
+    </div>
+
+     <div class="me-3">
+      <img src="../imagens/fantasia.jpg"  class="img-circular">
+      <p class="mt-2">Fantasia e Surrealismo</p>
+    </div>
+  </div>
+</div>
+
+<!-- Dá espaços ao container-->
+<div class="container-fluid mt-5"></div>
+
+<!-- Rodapé (Saiba Mais) -->
+<footer class="text-white py-5 mt-5" style="background-color: #000;">
+  <div class="container">
+    <div class="row">
+
+      <!-- Produtos -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">PRODUTOS</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Área Premium</a></li>
+        </ul>
+      </div>
+
+      <!-- Suporte -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">SUPORTE</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Como podemos ajudar?</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Atualizações de Classe</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Dúvidas Frequentes</a></li>
+          <li><a href="#" class="text-white text-decoration-none">O que é a Área Premium?</a></li>
+        </ul>
+      </div>
+
+      <!-- Informação Corporativa -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">INFORMAÇÃO CORPORATIVA</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Sobre nós</a></li>
+        </ul>
+      </div>
+
+      <!-- Siga-nos -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">SIGA-NOS</h6>
+        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-youtube"></i></a>
+        <a href="#" class="text-white fs-5"><i class="bi bi-x"></i></a>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

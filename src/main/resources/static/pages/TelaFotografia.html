@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plataforma de Artes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<body>
+
+ <style>
+      .banner {
+      background-image: url('../imagens/CapaDeus.png');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 20px;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+     .categoria-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        gap: 10px;
+        padding: 10px 0;
+        scrollbar-width: none;  /* Firefox */
+    }
+
+
+    @media (max-width: 992px) {
+      .categoria-container {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .categoria-container {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      }
+      
+      .categoria-btn {
+        padding: 6px 8px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .categoria-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .categoria-btn {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .categoria-container {
+        grid-template-columns: 1fr;
+      }
+    }
+        .categoria-btn {
+      border-radius: 50px;
+      border: 1px solid #0d6efd;
+      background-color: #f8f9fa;
+      color: #0d6efd;
+      padding: 8px 18px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+
+    .categoria-btn:hover {
+      background-color: #0d6efd;
+      color: white;
+      box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+      transform: translateY(-2px);
+    }
+
+
+    .artist-img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .artist-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s;
+  }
+
+
+  .artist-img:hover {
+    transform: scale(1.05);
+  }
+
+    .card-img-top {
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .publicar-section {
+      background-image: url('../imagens/pixacao.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .publicar-section .btn {
+      margin-top: 20px;
+    }
+
+    .img-vertical {
+      height: 150px;
+      width: 250;
+      object-fit: cover;
+    }
+
+    .scrolling-wrapper {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 1rem;
+    padding: 10px 0;
+  }
+
+  .scrolling-wrapper::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+
+    .carousel-inner img {
+      height: 200px; 
+      object-fit: cover;
+    }
+
+    .navbar-nav .nav-link {
+     transition: color 0.3s ease, transform 0.3s ease;
+    }       
+
+    .navbar-nav .nav-link:hover {
+      color: #007bff;
+      transform: translateY(-2px);
+      font-weight: 500;
+    }
+
+    .icon-hover svg,
+    .navbar a.text-dark svg {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .icon-hover:hover svg,
+    .navbar a.text-dark:hover svg {
+      transform: scale(1.2);
+      color: #007bff;
+    }
+
+    /* Estilos para notificações e email */
+    .notification-wrapper.dropdown {
+      position: relative;
+    }
+
+    .notification-icon {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ff4757;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notification-dropdown {
+      width: 350px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 0;
+    }
+
+    .notification-item {
+      padding: 10px 15px;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s;
+    }
+
+    .notification-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .notification-item.unread {
+      background-color: #f8f9fa;
+    }
+
+    .notification-time {
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    .email-icon, .notification-icon {
+      font-size: 20px;
+      color: #0d0c22;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .email-icon:hover, .notification-icon:hover {
+      color: #007bff;
+      transform: scale(1.2);
+    }
+
+    .topbar-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .dropdown-menu {
+      z-index: 2000;
+    }
+
+    /* Estilo para a foto pequena na NavBar */
+    .profile-pic-nav {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .premium-section h2 {
+      font-size: 2rem;
+    }
+
+    .premium-section ul li {
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .premium-section .card-float {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      border-radius: 15px;
+      background-color: white;
+    }
+
+    .premium-section .card-float:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-assine {
+      background-color: #0d6efd;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .plano-card {
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: white;
+    }
+
+    .plano-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(255, 249, 249, 0.5);
+    }
+
+    .plano-card ul li {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .premium-section {
+      background: linear-gradient(135deg, #26b7f5, #86d2ec, #2c5364);
+      padding: 80px 0;
+    }
+
+    .plano-card {
+      background-color: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .plano-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+      border-color: #17c1e8;
+    }
+
+    .plano-card h4 {
+      font-size: 1.8rem;
+      color: #6e6e6e;
+    }
+
+    .plano-card ul li {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    .plano-card h3 {
+      font-size: 1.8rem;
+      background: linear-gradient(90deg, #17e817, #05c4ff);
+      -webkit-background-clip: text;
+    }
+
+    .btn-assinar {
+      margin-top: 15px;
+      font-weight: bold;
+      border-radius: 30px;
+      padding: 12px 30px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-assinar:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-basic {
+      background-color: transparent;
+      border: 2px solid #17c1e8;
+      color: #17c1e8;
+    }
+
+    .btn-basic:hover {
+      background-color: #17c1e8;
+      color: #fff;
+    }
+
+    .btn-premium {
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-premium:hover {
+      background: linear-gradient(90deg, #ee0979, #ff6a00);
+    }
+
+    .dropdown-toggle::after {
+        display: none !important;
+    }
+
+    .img-circular {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+   
+    .img-quadrada {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+     /* Botões de seta */
+  .scroll-btn {
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 2;
+  }
+
+
+  .scroll-btn:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+
+  .scroll-btn.left {
+    left: -30px;
+  }
+
+
+  .scroll-btn.right {
+    right: -20px;
+  }
+ 
+#artPreviewModal .modal-content {
+  border-radius: 15px;
+  }
+  #artPreviewModal img {
+  transition: transform 0.3s ease;
+  }
+  #artPreviewModal img:hover {
+  transform: scale(1.02);
+  }
+
+
+  /* Margem e sombra da imagem/vídeo */
+.preview-media-wrapper {
+  padding: 10px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  background-color: #fff;
+  max-width: 90%;
+}
+
+
+/* Botões circulares */
+.btn-circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+
+.btn-like {
+  background-color: #ff4b6e;
+  color: white;
+}
+
+
+.btn-fav {
+  background-color: #ffc107;
+  color: white;
+}
+
+
+.btn-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+/* Botão de seguir com ícone + */
+.btn-outline-primary i {
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+
+/* Novos estilos para notificações e email */
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ff4757;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+   
+    .notification-wrapper {
+      position: relative;
+      margin-right: 15px;
+    }
+   
+    .notification-dropdown {
+      width: 350px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 0;
+    }
+   
+    .notification-item {
+      padding: 10px 15px;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s;
+    }
+   
+    .notification-item:hover {
+      background-color: #f8f9fa;
+    }
+   
+    .notification-item.unread {
+      background-color: #f8f9fa;
+    }
+   
+    .notification-time {
+      font-size: 12px;
+      color: #6c757d;
+    }
+   
+    .email-icon, .notification-icon {
+      font-size: 20px;
+      color: #0d0c22;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+   
+    .email-icon:hover, .notification-icon:hover {
+      color: #007bff;
+      transform: scale(1.2);
+    }
+   
+    .topbar-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+
+  .action-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .action-circle i {
+      transition: color 0.3s ease;
+    }
+
+    .action-circle.like i {
+      color: #666;
+    }
+
+    .action-circle.like.active i {
+      color: #dc3545;
+    }
+
+    .action-circle.fav i {
+      color: #666;
+    }
+
+    .action-circle.fav.active i {
+      color: #ffc107;
+    }
+
+    .action-circle:hover {
+      background-color: #f8f9fa;
+    }
+/* Caixa da mídia: menor, quadrada, com borda/sombra (separação) */
+.media-box{
+  --size: 380px;                 /* ajuste fino aqui */
+  width: min(100%, var(--size));
+  aspect-ratio: 1 / 1;           /* quadrado */
+  padding: 12px;
+  border: 2px solid #eee;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  display: grid;
+  place-items: center;
+}
+.media-box .media-el{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* + Seguir: menor, pill, efeito de preencher no hover */
+.btn-follow{
+  padding: .25rem .6rem;
+  border-width: 1px;
+  transition: all .2s ease;
+}
+.btn-follow:hover{
+  background: #0d6efd;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(13,110,253,.25);
+  transform: translateY(-1px);
+}
+
+
+/* Responsivo: diminui o quadrado em telas pequenas */
+@media (max-width: 576px){
+  .media-box{ --size: 300px; }
+}
+
+
+  </style>
+</head>
+  </body>
+
+
+
+ 
+
+
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+  <div class="container-fluid">
+    <!-- Logo + Nome -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="../imagens/logoNavBar.png" alt="Logo" style="width: 35px; margin-right: 10px;">
+      <span class="fw-bold">Malfatti</span>
+    </a>
+
+    <!-- Botão hamburguer responsivo -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Itens colapsáveis -->
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+      <!-- Links centralizados -->
+      <ul class="navbar-nav gap-3">
+        <li class="nav-item"><a class="nav-link fw-semibold" href="TelaInicial.html">Início</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold" href="TelaEventos.html">Eventos</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold" href="#">Artistas</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold" href="#">Obras</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold" href="#">Entrar</a></li>
+      </ul>
+    </div>
+
+    <!-- Ícones de notificação, email e perfil - CORRIGIDO -->
+    <div class="topbar-icons">
+      <!-- Ícone de Email/Chat -->
+      <a href="TelaBatePapo.html" class="email-icon me-3">
+        <i class="bi bi-envelope fs-5"></i>
+      </a>
+     
+      <!-- Dropdown de Notificações - ESTRUTURA CORRIGIDA -->
+      <div class="notification-wrapper dropdown me-3">
+        <a class="notification-icon dropdown-toggle" href="#" role="button" id="notificationDropdown" 
+           data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-bell fs-5"></i>
+          <span class="notification-badge">3</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown">
+          <li>
+            <h6 class="dropdown-header">Notificações</h6>
+          </li>
+          <li>
+            <div class="notification-item unread">
+              <div class="d-flex justify-content-between">
+                <strong>Novo seguidor</strong>
+                <small class="notification-time">2 min atrás</small>
+              </div>
+              <p>Ana Rodrigues começou a seguir você</p>
+            </div>
+          </li>
+          <li>
+            <div class="notification-item unread">
+              <div class="d-flex justify-content-between">
+                <strong>Evento próximo</strong>
+                <small class="notification-time">1 hora atrás</small>
+              </div>
+              <p>Romeu e Julieta começa em 2 dias</p>
+            </div>
+          </li>
+          <li>
+            <div class="notification-item">
+              <div class="d-flex justify-content-between">
+                <strong>Novo comentário</strong>
+                <small class="notification-time">5 horas atrás</small>
+              </div>
+              <p>Carlos comentou na sua obra</p>
+            </div>
+          </li>
+          <li>
+            <div class="notification-item">
+              <div class="d-flex justify-content-between">
+                <strong>Recomendação</strong>
+                <small class="notification-time">Ontem</small>
+              </div>
+              <p>Novos artistas para você seguir</p>
+            </div>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li>
+            <a class="dropdown-item text-center text-primary" href="#">
+              Ver todas as notificações
+            </a>
+          </li>
+        </ul>
+      </div>
+     
+      <!-- Dropdown de perfil -->
+      <div class="dropdown">
+        <a href="#" class="text-dark dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <span id="profile-icon">
+            <!-- Ícone padrão (será substituído se houver foto) -->
+            <i class="bi bi-person-circle fs-5"></i>
+          </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+          <li><a class="dropdown-item" href="PerfilArtista.html">Perfil</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">Sair</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!--Banner-->
+<div class="banner">
+  <h1>Descubra, siga e valorize artistas do mundo inteiro</h1>
+  <p>Música, Cinema, Literatura, Artes Visuais e muito mais</p>
+  <a href="#" class="btn btn-primary btn-lg">Comece a Explorar</a>
+</div>
+
+
+ <!-- Categoria -->
+<div class="container my-5">
+    <div class="row mb-3 align-items-center">
+        <!-- Barra de pesquisa expandida (ocupando espaço disponível) -->
+        <div class="col pe-2" style="flex-grow: 1;">
+            <input class="form-control rounded-pill w-100" type="search" placeholder="Pesquisar categorias..." aria-label="Pesquisar" style="height: 40px;">
+        </div>
+       
+        <!-- Botão de filtro com tamanho fixo igual às categorias -->
+        <div class="col-auto ps-0">
+            <button class="btn btn-outline-primary categoria-btn" type="button" style="height: 40px; min-width: 120px;">
+                <i class="bi bi-funnel"></i> Filtro
+            </button>
+        </div>
+    </div>
+   
+    <div class="categorias-wrapper">
+        <div class="categoria-container" id="categoriaContainer">
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaFotografia.html'">Fotografias</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaMusica.html'">Música</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaDanca.html'">Dança</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Literatura</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaCinema.html'">Cinema</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaTeatro.html'">Teatro</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaEscultura.html'">Escultura</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Pinturas</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Modelos</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Design</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Pinturas</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Desenhos</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Cêramica</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Arquitetura</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Artistas Recomendados - Carrossel Horizontal -->
+ <div class="container my-5 position-relative" id="fotografosCarousel">
+  
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Recomendações de Fotógrafos</h4>
+    <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+
+  <div class="position-relative">
+    <button class="scroll-btn left" onclick="scrollCarousel('fotografosCarousel',-1)">&#10094;</button>
+
+    <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto text-center">
+      <!-- Seus itens do carrossel aqui -->
+      <div class="me-3">
+        <img src="../imagens/lucas.avif" class="artist-img img-circular">
+        <p class="mt-2">Lucas Souza</p>
+      </div>
+
+    <div class="me-3">
+      <img src="../imagens/manuela.jpg"  class="artist-img img-circular">
+      <p class="mt-2">Manuela Castro</p>
+    </div>
+ 
+    <div class="me-3">
+      <img src="../imagens/rafael.avif" class="artist-img img-circular">
+      <p class="mt-2">Rafael Costa</p>
+        </div>
+ 
+        <div class="me-3">
+      <img src="https://storage.googleapis.com/a1aa/image/4bc38ab3-84a0-4778-9db2-2f442978701c.jpg" class="artist-img img-circular">
+      <p class="mt-2">Pedro</p>
+    </div>
+
+     <div class="me-3">
+      <img src="https://storage.googleapis.com/a1aa/image/5ed9dca6-e7d0-4054-7c20-ed19accc210a.jpg" class="artist-img img-circular">
+      <p class="mt-2">Lorrane Suellen</p>
+    </div>
+
+    <div class="me-3">
+      <img  src="https://storage.googleapis.com/a1aa/image/c62429cb-4916-40b1-6c91-d14f62de6117.jpg" class="artist-img img-circular">
+      <p class="mt-2">Marlene Santana</p>
+    </div>
+
+    <button class="scroll-btn right" onclick="scrollCarousel('fotografosCarousel', 1)">&#10095;</button>
+  </div>
+</div>
+
+
+
+<!-- Recomendações de fotografias com Carrossel Horizontal -->
+ <div class="container my-5" id="fotografiasCarousel">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="mb-0">Recomendações de Fotografias</h4>
+      <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+
+<div class="position-relative">
+    <button class="scroll-btn left" onclick="scrollCarousel('fotografiasCarousel', -1)">&#10094;</button>
+
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto" >
+
+    <div class="me-3" style="min-width: 400px; ">
+      <img src="../imagens/foto1.jpeg" class="artist-img img-quadrada" >
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;">
+      <img src="../imagens/foto2.jpg" class="artist-img img-quadrada">
+    </div>
+
+
+     <div class="card me-3" style="min-width: 400px;">
+      <img src="../imagens/urbanos.jpg" class="artist-img img-quadrada">
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;">
+      <img src="../imagens/foto4.jpg" class="artist-img img-quadrada">
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;">
+      <img src="../imagens/foto5.jpg" class="artist-img img-quadrada">
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;">
+      <img src="../imagens/casamento.jpg" class="artist-img img-quadrada">
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;">
+      <img src="../imagens/foto6.jpg" class="artist-img img-quadrada">
+    </div>
+    <button class="scroll-btn right" onclick="scrollCarousel('fotografiasCarousel', 1)">&#10095;</button>
+  </div>
+</div>
+
+<!-- Dá espaços ao container-->
+<div class="container-fluid mt-5"></div>
+
+<!-- Dá espaços ao container-->
+<div class="container-fluid mt-5"></div>
+
+<!-- Artistas Recomendados - Carrossel Horizontal -->
+ <div class="container my-5" id="fotosCarousel">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="mb-0">Recomendações de Fotos</h4>
+      <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+
+  <div class="position-relative">
+    <button class="scroll-btn left" onclick="scrollCarousel('fotosCarousel', -1)">&#10094;</button>
+  
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto text-center">
+
+    <div class="me-3">
+      <img src="../imagens/Retrato.jpg" class="artist-img img-circular" >
+      <p class="mt-2">Retrato</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/natural.avif"  class="artist-img img-circular">
+      <p class="mt-2">Paisagem</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/casamento2.jpg"  class="artist-img img-circular">
+      <p class="mt-2">Casamentos</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/moda.avif"  class="artist-img img-circular">
+      <p class="mt-2">Moda</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/documental.webp"  class="artist-img img-circular">
+      <p class="mt-2">Documental</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/macrofografia.webp"  class="artist-img img-circular">
+      <p class="mt-2">Macrofotografia</p>
+    </div>
+    
+    <div class="me-3">
+      <img src="../imagens/microfotofrafia.jpg"  class="artist-img img-circular">
+      <p class="mt-2">Microfotografia</p>
+    </div>
+
+     <div class="me-3">
+      <img src="../imagens/publicitaria.png"  class="artist-img img-circular">
+      <p class="mt-2">Publicitária</p>
+    </div>
+    <button class="scroll-btn right" onclick="scrollCarousel('fotosCarousel', 1)">&#10095;</button>
+  </div>
+  </div>
+</div>
+
+<!-- Dá espaços ao container-->
+<div class="container-fluid mt-5"></div>
+
+<!-- Estúdios Fotográficos Especializados -->
+<div class="container my-5" id="estudiosCarousel">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Estúdios Especializados em Fotografia</h4>
+    <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+
+  <div class="position-relative">
+    <button class="scroll-btn left" onclick="scrollCarousel('estudiosCarousel', -1)">&#10094;</button>
+
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto text-center">
+
+    <div class="me-3">
+      <img src="../imagens/noiva.jpg" class="artist-img img-circular">
+      <p class="mt-2">Noiva&Cia</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/studioModa.avif" class="artist-img img-circular">
+      <p class="mt-2">Pixel Frame</p>
+    </div>
+
+    <div class="me-3">
+      <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88" class="artist-img img-circular">
+      <p class="mt-2">Qa4rto Studio</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/studioraiz.jpg" class="artist-img img-circular">
+      <p class="mt-2">Univali Fotos</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/arqui.jpg" class="artist-img img-circular">
+      <p class="mt-2">mobli Studio</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/studioMacro.jpg" class="artist-img img-circular">
+      <p class="mt-2">Zoom Studio</p>
+    </div>
+<button class="scroll-btn right" onclick="scrollCarousel('estudiosCarousel', 1)">&#10095;</button>
+  </div>
+  </div>
+</div>
+
+
+
+<!-- Rodapé (Saiba Mais) -->
+<footer class="text-white py-5 mt-5" style="background-color: #000;">
+  <div class="container">
+    <div class="row">
+
+
+      <!-- Produtos -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">PRODUTOS</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Área Premium</a></li>
+        </ul>
+      </div>
+
+
+      <!-- Suporte -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">SUPORTE</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Como podemos ajudar?</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Atualizações de Classe</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Dúvidas Frequentes</a></li>
+          <li><a href="#" class="text-white text-decoration-none">O que é a Área Premium?</a></li>
+        </ul>
+      </div>
+
+
+      <!-- Informação Corporativa -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">INFORMAÇÃO CORPORATIVA</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Sobre nós</a></li>
+        </ul>
+      </div>
+
+
+      <!-- Siga-nos -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">SIGA-NOS</h6>
+        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-youtube"></i></a>
+        <a href="#" class="text-white fs-5"><i class="bi bi-x"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+<!-- Bootstrap JS -->
+ <script  src="../Assents/TelaDanca.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Função genérica para scroll em qualquer carrossel
+  function scrollCarousel(containerId, direction) {
+    const container = document.querySelector(`#${containerId} .scrolling-wrapper`);
+    const scrollAmount = 300; // distância do scroll
+    
+    container.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+
+  // ===== JAVASCRIPT DA NAVBAR =====
+
+  // Script para simular o funcionamento das notificações
+  document.addEventListener('DOMContentLoaded', function() {
+    // Simular clique nas notificações
+    const notificationItems = document.querySelectorAll('.notification-item');
+    notificationItems.forEach(item => {
+      item.addEventListener('click', function() {
+        this.classList.remove('unread');
+        updateNotificationCount();
+      });
+    });
+
+    // Atualizar contador de notificações
+    function updateNotificationCount() {
+      const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+      const badge = document.querySelector('.notification-badge');
+      badge.textContent = unreadCount;
+
+      if(unreadCount === 0) {
+        badge.style.display = 'none';
+      } else {
+        badge.style.display = 'flex';
+      }
+    }
+
+    // Verificar se há usuário logado e atualizar a NavBar
+    const usuarioLogadoString = localStorage.getItem('usuarioLogado');
+    let usuarioLogado = null;
+
+    if (usuarioLogadoString) {
+      try {
+        usuarioLogado = JSON.parse(usuarioLogadoString);
+        console.log('Usuário logado detectado na NavBar:', usuarioLogado);
+
+        // Atualizar foto de perfil na NavBar se existir
+        if (usuarioLogado.fotoPerfil) {
+          const profileIcon = document.getElementById('profile-icon');
+          if (profileIcon) {
+            profileIcon.innerHTML = `<img src="${usuarioLogado.fotoPerfil}" class="profile-pic-nav" alt="Foto do perfil">`;
+          }
+        }
+
+        // Esconder link "Entrar" na NavBar
+        const entrarLink = document.querySelector('.navbar-nav .nav-link[href="#"]');
+        if (entrarLink && entrarLink.textContent.trim() === 'Entrar') {
+          entrarLink.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Erro ao parsear usuário logado na NavBar:', error);
+      }
+    }
+
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('usuarioLogado');
+      localStorage.removeItem('idUsuario');
+      localStorage.removeItem('emailUsuario');
+      window.location.href = 'TelaInicial.html';
+    });
+  });
+</script>
+</body>
+</html>

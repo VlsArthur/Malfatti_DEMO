@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malfatti - Perfil do Artista</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-banner {
+      background-color: #e9ecef;
+      height: 180px;
+      position: relative;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .profile-img-container {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .content-container {
+      margin-top: 90px;
+      padding: 0 15px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 30px;
+      color: #333;
+    }
+
+    .post-box {
+      border: 2px dashed #ccc;
+      text-align: center;
+      padding: 3px;
+      border-radius: 8px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .post-box:hover {
+      border-color: #0d6efd;
+      background-color: #f0f7ff;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .upload-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #0d6efd;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      aspect-ratio: 1/1;
+    }
+
+    .gallery-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(255, 0, 0, 0.7);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      font-size: 12px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    
+    /* Subnav estilizada */
+    .subnav {
+      background-color: #fff;
+      border-top: 1px solid #e9ecef;
+      border-bottom: 1px solid #e9ecef;
+      padding: 10px 0;
+      margin-top: 15px;
+    }
+    
+    .subnav .nav-link {
+      color: #495057;
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 20px;
+      transition: all 0.3s;
+    }
+    
+    .subnav .nav-link:hover, 
+    .subnav .nav-link.active {
+      color: #0d6efd;
+      background-color: rgba(13, 110, 253, 0.1);
+    }
+    
+    .profile-stats {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 15px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    .stat-number {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-link {
+      color: #495057;
+      font-size: 1.5rem;
+      transition: all 0.3s;
+    }
+    
+    .social-link:hover {
+      color: #0d6efd;
+      transform: translateY(-3px);
+    }
+    
+    .profile-content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .bio-section {
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e9ecef;
+      margin-bottom: 20px;
+    }
+    
+    .bio-title {
+      font-weight: 600;
+      color: #343a40;
+      margin-bottom: 10px;
+    }
+    
+    .bio-text {
+      color: #495057;
+      line-height: 1.6;
+    }
+
+    /* Estilos para o modal de publicação */
+    .modal-content {
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .modal-header {
+      border-bottom: none;
+      padding: 15px 20px;
+    }
+    
+    .modal-title {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .nav-pills .nav-link {
+      color: #495057;
+      font-weight: 500;
+      border-radius: 0;
+      padding: 10px 20px;
+    }
+    
+    .nav-pills .nav-link.active {
+      color: #0d6efd;
+      background-color: transparent;
+      border-bottom: 3px solid #0d6efd;
+    }
+    
+    .tab-content {
+      padding: 20px;
+    }
+    
+    .upload-area {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 40px 20px;
+      text-align: center;
+      background-color: #f8f9fa;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+    }
+    
+    .upload-area:hover {
+      border-color: #0d6efd;
+      background-color: #f0f7ff;
+    }
+    
+    .upload-icon-large {
+      font-size: 3rem;
+      color: #0d6efd;
+      margin-bottom: 15px;
+    }
+    
+    .upload-text {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    
+    .upload-subtext {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    
+    .btn-select {
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+    
+    .btn-select:hover {
+      background-color: #0b5ed7;
+    }
+    
+    .preview-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .image-preview {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+    
+    .tag-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 8px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      background-color: white;
+    }
+    
+    .tag {
+      background-color: #e9ecef;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .tag-remove {
+      cursor: pointer;
+      color: #6c757d;
+    }
+    
+    .tag-input input {
+      border: none;
+      outline: none;
+      flex-grow: 1;
+      min-width: 100px;
+      padding: 5px;
+    }
+    
+    .publication-item {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    
+    .publication-image-container {
+      height: 300px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+    }
+    
+    .publication-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    .publication-content {
+      padding: 15px;
+    }
+    
+    .publication-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+    
+    .publication-description {
+      color: #495057;
+      margin-bottom: 10px;
+    }
+    
+    .publication-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    
+    .publication-tag {
+      background-color: #e9ecef;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+    
+    .publication-date {
+      color: #6c757d;
+      font-size: 0.8rem;
+    }
+
+    /* Corrige o problema do modal-backdrop */
+     body.modal-open {
+      overflow: auto;
+      padding-right: 0 !important;
+    }
+    
+    .modal-backdrop {
+      z-index: 1040;
+    }
+    
+    .modal {
+      z-index: 1050;
+    }
+
+    /* Ajustes para grid de publicações */
+    #gallery-container .col-md-6 {
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .profile-banner {
+        height: 150px;
+      }
+
+      .profile-img-container {
+        width: 100px;
+        height: 100px;
+        bottom: -50px;
+      }
+
+      .content-container {
+        margin-top: 70px;
+        padding: 0 10px;
+      }
+
+      .upload-icon {
+        font-size: 1.5rem;
+      }
+
+      .navbar-brand span {
+        font-size: 1rem;
+      }
+      
+      .subnav .nav-link {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+      }
+      
+      .stat-item {
+        font-size: 0.8rem;
+      }
+      
+      .publication-image-container {
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center me-4" href="#">
+        <img src="https://via.placeholder.com/35" alt="Logo" style="width: 35px; margin-right: 10px;">
+        <span class="fw-bold">Malfatti</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="TelaInicial.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Eventos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Artistas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Obras</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Entrar</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Criar conta</a></li>
+        </ul>
+
+        <form class="d-flex me-3" role="search">
+          <input class="form-control me-2" type="search" placeholder="Pesquisar">
+        </form>
+
+        <div class="d-flex align-items-center gap-3">
+          <!-- Ícone de Perfil com Dropdown -->
+          <div class="dropdown">
+            <a class="text-dark dropdown-toggle" href="#" id="dropdownPerfil" data-bs-toggle="dropdown">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 10c-1.105 0-2 .672-2 1.5S9.895 13 11 13s2-.672 2-1.5S12.105 10 11 10z"/>
+                <path d="M9 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z"/>
+              </svg>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end mt-2">
+              <li><a class="dropdown-item" href="PerfilUsuario.html">Usuário</a></li>
+              <li><a class="dropdown-item" href="PerfilArtista.html">Artista</a></li>
+            </ul>
+          </div>
+
+          <!-- Carrinho -->
+          <a href="#" class="text-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-cart3" viewBox="0 0 16 16">
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2l.89 2H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5z"/>
+              <path d="M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-4">
+  <!-- Banner e imagem de perfil -->
+   <div class="bg-white shadow-sm rounded">
+  <div class="profile-banner">
+    <div class="profile-img-container">
+      <img src="../imagens/modelorosto.jpg" class="profile-img" />
+    </div>
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="container content-container text-center">
+    <h4 class="fw-bold">Ana Clara</h4>
+    
+    <!-- Estatísticas -->
+    <div class="profile-stats">
+      <div class="stat-item">
+        <div class="stat-number">24</div>
+        <div>Obras</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">1.2k</div>
+        <div>Seguidores</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">120</div>
+        <div>Seguindo</div>
+      </div>
+    </div>
+    
+    <!-- Links sociais -->
+    <div class="social-links">
+      <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+    </div>
+
+    <!-- Subnav -->
+    <div class="subnav">
+      <ul class="nav justify-content-center">
+        <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-image me-2"></i> Publicações</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-palette me-2"></i> Obras</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-calendar-alt me-2"></i> Eventos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-store me-2"></i> Loja</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-trophy me-2"></i> Prêmios</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-bookmark me-2"></i> Coleções</a></li>
+      </ul>
+    </div>
+    
+    <!-- Conteúdo do perfil -->
+    <div class="profile-content">
+      <div class="bio-section">
+        <div class="bio-title">Biografia</div>
+        <div class="bio-text">
+          Artista visual especializada em pintura digital e ilustração. Graduada em Belas Artes pela Universidade Federal, minha obra explora a relação entre natureza e tecnologia. Participante de exposições coletivas em São Paulo, Rio de Janeiro e Buenos Aires. Atualmente trabalhando em uma série sobre memórias urbanas.
+        </div>
+      </div>
+      
+      <h5 class="section-title text-start">Publicações</h5>
+    
+      <div class="mb-3">
+        <label for="arquivo-publicacao" class="post-box w-100">
+          <div>
+            <div class="upload-icon">+</div>
+            <div>Adicionar Publicações</div>
+            <input id="arquivo-publicacao" type="file" class="file-input" accept="image/*" multiple>
+          </div>
+        </label>
+      </div>
+      <div class="row g-3" id="gallery-container">
+        <!-- As publicações serão carregadas aqui -->
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- Modal de Publicação -->
+  <div class="modal fade" id="publicationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Nova Publicação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="pills-image-tab" data-bs-toggle="pill" data-bs-target="#pills-image" type="button" role="tab">Imagem</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pills-details-tab" data-bs-toggle="pill" data-bs-target="#pills-details" type="button" role="tab" disabled>Detalhes</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-image" role="tabpanel" tabindex="0">
+              <div class="upload-area" id="uploadArea">
+                <div class="upload-icon-large">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">Arraste e solte uma imagem aqui</div>
+                <div class="upload-subtext">ou</div>
+                <button class="btn btn-select">Selecionar do computador</button>
+                <input type="file" id="imageFile" accept="image/*" style="display: none;">
+              </div>
+              <div class="preview-container" id="previewContainer" style="display: none;">
+                <img id="imagePreview" class="image-preview" alt="Pré-visualização">
+              </div>
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" id="nextStepBtn" disabled>Próximo</button>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-details" role="tabpanel" tabindex="0">
+              <div class="mb-3">
+                <label for="publicationTitle" class="form-label">Título</label>
+                <input type="text" class="form-control" id="publicationTitle" placeholder="Título da publicação">
+              </div>
+              <div class="mb-3">
+                <label for="publicationDescription" class="form-label">Descrição</label>
+                <textarea class="form-control" id="publicationDescription" rows="3" placeholder="Adicione uma descrição..."></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Tags</label>
+                <div class="tag-input" id="tagInput">
+                  <!-- Tags serão adicionadas aqui -->
+                  <input type="text" id="tagField" placeholder="Adicione tags (pressione Enter)">
+                </div>
+                <div class="form-text">Separe as tags com vírgulas ou pressione Enter</div>
+              </div>
+              <div class="d-flex justify-content-end gap-2">
+                <button class="btn btn-outline-secondary" id="prevStepBtn">Voltar</button>
+                <button class="btn btn-primary" id="publishBtn">Postar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Armazenamento local para as publicações
+    let publications = JSON.parse(localStorage.getItem('publications')) || [];
+    let selectedImage = null;
+    let tags = [];
+    let publicationModal = null;
+    let isPosting = false; // Flag para evitar postagem duplicada
+
+    // Abrir o modal ao clicar no botão de adicionar publicação
+    document.addEventListener('DOMContentLoaded', function() {
+      publicationModal = new bootstrap.Modal(document.getElementById('publicationModal'));
+      renderPublications();
+      
+      document.querySelector('.post-box').addEventListener('click', function() {
+        publicationModal.show();
+      });
+
+      // Corrigir o clique no botão "Selecionar do computador"
+      document.querySelector('.btn-select').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('imageFile').click();
+      });
+
+      // Evento para selecionar imagem
+      document.getElementById('imageFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            selectedImage = event.target.result;
+            document.getElementById('imagePreview').src = selectedImage;
+            document.getElementById('previewContainer').style.display = 'block';
+            document.getElementById('nextStepBtn').disabled = false;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Publicar
+      document.getElementById('publishBtn').addEventListener('click', function() {
+        // Evitar postagem duplicada
+        if (isPosting) return;
+        isPosting = true;
+        
+        const title = document.getElementById('publicationTitle').value.trim();
+        const description = document.getElementById('publicationDescription').value.trim();
+        
+        if (!title) {
+          alert('Por favor, adicione um título');
+          isPosting = false;
+          return;
+        }
+        
+        const publication = {
+          id: Date.now(),
+          title,
+          description,
+          tags: [...tags],
+          image: selectedImage,
+          date: new Date().toLocaleDateString('pt-BR')
+        };
+        
+        publications.unshift(publication);
+        localStorage.setItem('publications', JSON.stringify(publications));
+        
+        // Fechar modal e resetar
+        if (publicationModal) {
+          publicationModal.hide();
+        }
+        
+        renderPublications();
+        isPosting = false;
+      });
+
+      // Resetar o modal quando fechado
+      document.getElementById('publicationModal').addEventListener('hidden.bs.modal', function() {
+        resetModal();
+        // Forçar remoção do backdrop se necessário
+        const backdrops = document.getElementsByClassName('modal-backdrop');
+        while(backdrops.length > 0) {
+          document.body.removeChild(backdrops[0]);
+        }
+        document.body.style.overflow = 'auto';
+        document.body.style.paddingRight = '0';
+      });
+
+      // Habilitar arrastar e soltar
+      const uploadArea = document.getElementById('uploadArea');
+      
+      uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#0d6efd';
+        this.style.backgroundColor = '#f0f7ff';
+      });
+      
+      uploadArea.addEventListener('dragleave', function() {
+        this.style.borderColor = '#ccc';
+        this.style.backgroundColor = '#f8f9fa';
+      });
+      
+      uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#ccc';
+        this.style.backgroundColor = '#f8f9fa';
+        
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            selectedImage = event.target.result;
+            document.getElementById('imagePreview').src = selectedImage;
+            document.getElementById('previewContainer').style.display = 'block';
+            document.getElementById('nextStepBtn').disabled = false;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Navegação entre as abas
+      document.getElementById('nextStepBtn').addEventListener('click', function() {
+        document.getElementById('pills-details-tab').disabled = false;
+        document.getElementById('pills-details-tab').click();
+      });
+
+      document.getElementById('prevStepBtn').addEventListener('click', function() {
+        document.getElementById('pills-image-tab').click();
+      });
+
+      // Gerenciamento de tags
+      document.getElementById('tagField').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ',') {
+          e.preventDefault();
+          const tagText = this.value.trim();
+          if (tagText) {
+            addTag(tagText);
+            this.value = '';
+          }
+        }
+      });
+    });
+
+    function addTag(tagText) {
+      // Limpa a tag de espaços extras e verifica se já existe
+      const cleanTag = tagText.trim();
+      if (cleanTag && !tags.includes(cleanTag)) {
+        tags.push(cleanTag);
+        renderTags();
+      }
+    }
+
+    function removeTag(tagText) {
+      tags = tags.filter(tag => tag !== tagText);
+      renderTags();
+    }
+
+    function renderTags() {
+      const tagInput = document.getElementById('tagInput');
+      // Remove todas as tags atuais (exceto o input)
+      const children = Array.from(tagInput.children);
+      children.forEach(child => {
+        if (child.tagName !== 'INPUT') {
+          tagInput.removeChild(child);
+        }
+      });
+      
+      // Adiciona as tags
+      tags.forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.innerHTML = `
+          ${tag}
+          <span class="tag-remove" onclick="removeTag('${tag.replace(/'/g, "\\'")}')">×</span>
+        `;
+        tagInput.insertBefore(tagElement, document.getElementById('tagField'));
+      });
+    }
+
+    function resetModal() {
+      selectedImage = null;
+      tags = [];
+      document.getElementById('imagePreview').src = '';
+      document.getElementById('previewContainer').style.display = 'none';
+      document.getElementById('nextStepBtn').disabled = true;
+      document.getElementById('publicationTitle').value = '';
+      document.getElementById('publicationDescription').value = '';
+      document.getElementById('tagField').value = '';
+      document.getElementById('pills-image-tab').click();
+      document.getElementById('pills-details-tab').disabled = true;
+      renderTags(); // Limpa as tags
+    }
+
+    // Renderizar publicações na página
+    function renderPublications() {
+      const galleryContainer = document.getElementById('gallery-container');
+      galleryContainer.innerHTML = '';
+      
+      if (publications.length === 0) {
+        galleryContainer.innerHTML = '<div class="col-12"><p class="text-center py-4">Nenhuma publicação ainda</p></div>';
+        return;
+      }
+      
+      publications.forEach(pub => {
+        // Alterado para col-md-6 para mostrar 2 por linha
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-12';
+        
+        const pubItem = document.createElement('div');
+        pubItem.className = 'publication-item';
+        
+        pubItem.innerHTML = `
+          <div class="publication-image-container">
+            <img src="${pub.image}" class="publication-image" alt="${pub.title}">
+          </div>
+          <div class="publication-content">
+            <div class="publication-title">${pub.title}</div>
+            <div class="publication-description">${pub.description}</div>
+            <div class="publication-tags">
+              ${pub.tags.map(tag => `<span class="publication-tag">${tag}</span>`).join('')}
+            </div>
+            <div class="publication-date">Publicado em ${pub.date}</div>
+          </div>
+        `;
+        
+        col.appendChild(pubItem);
+        galleryContainer.appendChild(col);
+      });
+    }
+  </script>
+
+</body>
+</html>

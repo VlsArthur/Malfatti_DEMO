@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malfatti - Eventos Próximos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .dropdown-toggle::after {
+  display: none !important;
+}
+        
+        .banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../imagens/grande-teatro-.jpg');
+            background-size: cover;
+            background-position: center;
+            background-image: url('../imagens/grande-teatro-.jpg');
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 30px;
+        }
+
+        .event-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .event-img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .event-date {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .event-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .event-location {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .event-category {
+            color: #9c4dcc;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .map-container {
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #6a1b9a;
+            color: white;
+            border-color: #6a1b9a;
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #6a1b9a;
+        }
+
+        .navbar-nav .nav-link {
+            transition: color 0.3s ease, transform 0.3s ease;
+        }       
+
+        .navbar-nav .nav-link:hover {
+            color: #007bff;
+            transform: translateY(-2px);
+            font-weight: 500;
+        }
+
+        .icon-hover svg,
+        .navbar a.text-dark svg {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .icon-hover:hover svg,
+        .navbar a.text-dark:hover svg {
+            transform: scale(1.2);
+            color: #007bff;
+        }
+
+        /* Estilos para notificações e email */
+        .notification-wrapper.dropdown {
+            position: relative;
+        }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-dropdown {
+            width: 350px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .notification-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .notification-item.unread {
+            background-color: #f8f9fa;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .email-icon, .notification-icon {
+            font-size: 20px;
+            color: #0d0c22;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .email-icon:hover, .notification-icon:hover {
+            color: #007bff;
+            transform: scale(1.2);
+        }
+
+        .topbar-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dropdown-menu {
+            z-index: 2000;
+        }
+
+        /* Estilo para a foto pequena na NavBar */
+        .profile-pic-nav {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .location-input {
+            position: relative;
+        }
+
+        .location-input .btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: transparent;
+            border: none;
+            color: #6a1b9a;
+        }
+
+        @media (max-width: 768px) {
+            .banner {
+                height: 200px;
+            }
+            
+            .event-img {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+        <div class="container-fluid">
+            <!-- Logo + Nome -->
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="../imagens/logoNavBar.png" alt="Logo" style="width: 35px; margin-right: 10px;">
+                <span class="fw-bold">Malfatti</span>
+            </a>
+
+            <!-- Botão hamburguer responsivo -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Itens colapsáveis -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+                <!-- Links centralizados -->
+                <ul class="navbar-nav gap-3">
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="TelaInicial.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold active" href="TelaEventos.html">Eventos</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">Artistas</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">Obras</a></li>
+                    <li class="nav-item"><a class="nav-link fw-semibold" href="#">Entrar</a></li>
+                </ul>
+            </div>
+
+            <!-- Ícones de notificação, email e perfil -->
+            <div class="topbar-icons">
+                <!-- Ícone de Email/Chat -->
+                <a href="TelaBatePapo.html" class="email-icon me-3">
+                    <i class="bi bi-envelope fs-5"></i>
+                </a>
+
+                <!-- Dropdown de Notificações -->
+                <div class="notification-wrapper dropdown me-3">
+                    <a class="notification-icon dropdown-toggle" href="#" role="button" id="notificationDropdown"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span class="notification-badge">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown">
+                        <li>
+                            <h6 class="dropdown-header">Notificações</h6>
+                        </li>
+                        <li>
+                            <div class="notification-item unread">
+                                <div class="d-flex justify-content-between">
+                                    <strong>Novo seguidor</strong>
+                                    <small class="notification-time">2 min atrás</small>
+                                </div>
+                                <p>Ana Rodrigues começou a seguir você</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="notification-item unread">
+                                <div class="d-flex justify-content-between">
+                                    <strong>Evento próximo</strong>
+                                    <small class="notification-time">1 hora atrás</small>
+                                </div>
+                                <p>Romeu e Julieta começa em 2 dias</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="notification-item">
+                                <div class="d-flex justify-content-between">
+                                    <strong>Novo comentário</strong>
+                                    <small class="notification-time">5 horas atrás</small>
+                                </div>
+                                <p>Carlos comentou na sua obra</p>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-center text-primary" href="#">
+                                Ver todas as notificações
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dropdown de perfil -->
+                <div class="dropdown">
+                    <a href="#" class="text-dark dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span id="profile-icon">
+                            <!-- Ícone padrão (será substituído se houver foto) -->
+                            <i class="bi bi-person-circle fs-5"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="PerfilArtista.html">Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner -->
+    <div class="banner">
+        <h1>Eventos Artísticos Próximos</h1>
+        <p>Encontre shows, exposições e performances perto de você</p>
+    </div>
+
+    <div class="container">
+        <!-- Barra de pesquisa e filtros -->
+        <div class="search-container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="location-input">
+                        <input type="text" class="form-control" placeholder="Digite sua localização ou use sua posição atual" id="endereco">
+                        <button class="btn" id="useLocationBtn">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="radiusSelect">
+                        <option value="5">Raio: 5 km</option>
+                        <option value="10" selected>Raio: 10 km</option>
+                        <option value="20">Raio: 20 km</option>
+                        <option value="50">Raio: 50 km</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <h6 class="section-title">Filtrar por categoria</h6>
+                <div>
+                    <button class="filter-btn active">Todos</button>
+                    <button class="filter-btn">Música</button>
+                    <button class="filter-btn">Dança</button>
+                    <button class="filter-btn">Teatro</button>
+                    <button class="filter-btn">Artes Visuais</button>
+                    <button class="filter-btn">Literatura</button>
+                    <button class="filter-btn">Cinema</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa -->
+        <div class="map-container">
+            <div id="map" style="height: 400px;"></div>
+        </div>
+
+        <!-- Lista de eventos -->
+        <h4 class="section-title">Eventos próximos</h4>
+        <div class="row" id="eventsList">
+            <!-- Evento 1 -->
+            <div class="col-md-4">
+                <div class="event-card">
+                    <img src="../imagens/Eventos.png" class="event-img" alt="Show de Música">
+                    <div class="p-3">
+                        <span class="event-date">15 OUT 2023</span>
+                        <h5 class="event-title">Festival de Música Independente</h5>
+                        <p class="event-location"><i class="bi bi-geo-alt"></i> Teatro Municipal, 2km</p>
+                        <span class="event-category">Música</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Evento 2 -->
+            <div class="col-md-4">
+                <div class="event-card">
+                    <img src="../imagens/galeria.central.jpg" class="event-img" alt="Exposição de Arte">
+                    <div class="p-3">
+                        <span class="event-date">20 OUT 2023</span>
+                        <h5 class="event-title">Exposição: Arte Contemporânea</h5>
+                        <p class="event-location"><i class="bi bi-geo-alt"></i> Galeria Central, 3.5km</p>
+                        <span class="event-category">Artes Visuais</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Evento 3 -->
+            <div class="col-md-4">
+                <div class="event-card">
+                    <img src="../imagens/teatro.nacional.jpg" class="event-img" alt="Espetáculo de Dança">
+                    <div class="p-3">
+                        <span class="event-date">22 OUT 2023</span>
+                        <h5 class="event-title">Ballet Clássico: O Lago dos Cisnes</h5>
+                        <p class="event-location"><i class="bi bi-geo-alt"></i> Teatro Nacional, 1.2km</p>
+                        <span class="event-category">Dança</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Evento 4 -->
+            <div class="col-md-4">
+                <div class="event-card">
+                    <img src="../imagens/teatro.praça.sete.jpg" class="event-img" alt="Peça de Teatro">
+                    <div class="p-3">
+                        <span class="event-date">25 OUT 2023</span>
+                        <h5 class="event-title">Peça: Romeu e Julieta</h5>
+                        <p class="event-location"><i class="bi bi-geo-alt"></i> Casa de Cultura, 4km</p>
+                        <span class="event-category">Teatro</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Evento 5 -->
+            <div class="col-md-4">
+                <div class="event-card">
+                    <img src="../imagens/biblionova.jpeg" class="event-img" alt="Sarau Literário">
+                    <div class="p-3">
+                        <span class="event-date">28 OUT 2023</span>
+                        <h5 class="event-title">Sarau Literário</h5>
+                        <p class="event-location"><i class="bi bi-geo-alt"></i> Biblioteca Municipal, 2.8km</p>
+                        <span class="event-category">Literatura</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Evento 6 -->
+            <div class="col-md-4"> 
+                <div class="event-card">
+                    <img src="../imagens/cine.art.e.jpg" class="event-img" alt="Festival de Cinema">
+                    <div class="p-3">
+                        <span class="event-date">30 OUT 2023</span>
+                        <h5 class="event-title">Festival de Cinema Independente</h5>
+                        <p class="event-location"><i class="bi bi-geo-alt"></i> Cine Arte, 5km</p>
+                        <span class="event-category">Cinema</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="text-white py-5 mt-5" style="background-color: #000;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h6 class="fw-bold">PRODUTOS</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Área Premium</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h6 class="fw-bold">SUPORTE</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Como podemos ajudar?</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Dúvidas Frequentes</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h6 class="fw-bold">INFORMAÇÃO CORPORATIVA</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Sobre nós</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h6 class="fw-bold">SIGA-NOS</h6>
+                    <a href="#" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white me-3 fs-5"><i class="bi bi-youtube"></i></a>
+                    <a href="#" class="text-white fs-5"><i class="bi bi-x"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="../Assents/mapa.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6uwlSVsBryCSsnDfECf4ob7j5p5k6SQ4&callback=initMapSaoPaulo&libraries=places"></script>
+
+    <script>
+    // ===== INICIALIZAÇÃO DO MAPA PARA SÃO PAULO =====
+
+    // Função específica para inicializar o mapa sempre em São Paulo
+    function initMapSaoPaulo() {
+        console.log('🗺️ Inicializando mapa com foco em São Paulo...');
+
+        // Coordenadas de São Paulo, Brasil
+        const saoPauloLatLng = { lat: -23.5505, lng: -46.6333 };
+
+        // Inicializar o geocoder
+        if (typeof google !== 'undefined' && google.maps) {
+            window.geocoder = new google.maps.Geocoder();
+
+            // Configurar autocomplete se o campo existir
+            const input = document.getElementById('endereco');
+            if (input) {
+                window.autocomplete = new google.maps.places.Autocomplete(input, {
+                    types: ['geocode'],
+                    componentRestrictions: { 'country': ['br'] }
+                });
+
+                window.autocomplete.addListener('place_changed', () => {
+                    const place = window.autocomplete.getPlace();
+                    if (place.geometry && place.geometry.location) {
+                        updateMapWithLocation(place.geometry.location, place.name);
+                        input.value = "";
+                    }
+                });
+            }
+
+            // Criar o mapa centralizado em São Paulo
+            window.mapa = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: saoPauloLatLng,
+                mapTypeControl: true,
+                streetViewControl: true,
+                fullscreenControl: true
+            });
+
+            console.log('✅ Mapa criado e centralizado em São Paulo');
+
+            // Adicionar marcador vermelho padrão em São Paulo
+            if (typeof updateMapWithLocation === 'function') {
+                updateMapWithLocation(saoPauloLatLng, "São Paulo, SP");
+            } else {
+                // Criar marcador básico com ícone vermelho padrão se a função não existir
+                new google.maps.Marker({
+                    position: saoPauloLatLng,
+                    map: window.mapa,
+                    title: "São Paulo, SP"
+                    // Sem especificar 'icon' usa automaticamente o ícone vermelho padrão
+                });
+            }
+
+            // Carregar eventos após o mapa estar pronto
+            carregarEventos();
+        } else {
+            console.error('❌ Google Maps API não carregada');
+        }
+    }
+
+    // Função para carregar eventos
+    function carregarEventos() {
+        fetch('/api/eventos', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Falha ao buscar eventos');
+            }
+            return response.json();
+        })
+        .then(eventos => {
+            console.log('📅 Eventos carregados:', eventos.length);
+            if (typeof exibirEventos === 'function') {
+                exibirEventos(eventos);
+            } else {
+                console.log('Função exibirEventos não encontrada, eventos:', eventos);
+            }
+        })
+        .catch(error => {
+            console.error('❌ Erro ao carregar eventos:', error);
+        });
+    }
+
+    // Função auxiliar para atualizar localização do mapa (se não existir no mapa.js)
+    function updateMapWithLocation(location, title) {
+        if (window.mapa) {
+            window.mapa.setCenter(location);
+
+            // Remover marcador anterior do usuário se existir
+            if (window.userMarker) {
+                window.userMarker.setMap(null);
+            }
+
+            // Criar novo marcador com ícone vermelho padrão (mais famoso)
+            window.userMarker = new google.maps.Marker({
+                position: location,
+                map: window.mapa,
+                title: title
+                // Sem especificar 'icon' usa automaticamente o ícone vermelho padrão do Google Maps
+            });
+        }
+    }
+
+    // Fallback: se a função initMap original for chamada, redirecionar para nossa função
+    window.initMap = function() {
+        console.log('🔄 initMap original chamada, redirecionando para initMapSaoPaulo...');
+        initMapSaoPaulo();
+    };
+
+    // ===== JAVASCRIPT DA NAVBAR =====
+
+    // Script para simular o funcionamento das notificações
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('📄 TelaEventos.html carregada - Aguardando Google Maps API...');
+        // Simular clique nas notificações
+        const notificationItems = document.querySelectorAll('.notification-item');
+        notificationItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.remove('unread');
+                updateNotificationCount();
+            });
+        });
+
+        // Atualizar contador de notificações
+        function updateNotificationCount() {
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            const badge = document.querySelector('.notification-badge');
+            badge.textContent = unreadCount;
+
+            if(unreadCount === 0) {
+                badge.style.display = 'none';
+            } else {
+                badge.style.display = 'flex';
+            }
+        }
+
+        // Verificar se há usuário logado e atualizar a NavBar
+        const usuarioLogadoString = localStorage.getItem('usuarioLogado');
+        let usuarioLogado = null;
+
+        if (usuarioLogadoString) {
+            try {
+                usuarioLogado = JSON.parse(usuarioLogadoString);
+                console.log('Usuário logado detectado na NavBar:', usuarioLogado);
+
+                // Atualizar foto de perfil na NavBar se existir
+                if (usuarioLogado.fotoPerfil) {
+                    const profileIcon = document.getElementById('profile-icon');
+                    if (profileIcon) {
+                        profileIcon.innerHTML = `<img src="${usuarioLogado.fotoPerfil}" class="profile-pic-nav" alt="Foto do perfil">`;
+                    }
+                }
+
+                // Esconder link "Entrar" na NavBar
+                const entrarLink = document.querySelector('.navbar-nav .nav-link[href="#"]');
+                if (entrarLink && entrarLink.textContent.trim() === 'Entrar') {
+                    entrarLink.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Erro ao parsear usuário logado na NavBar:', error);
+            }
+        }
+
+        // Logout
+        document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('usuarioLogado');
+            localStorage.removeItem('idUsuario');
+            localStorage.removeItem('emailUsuario');
+            window.location.href = 'TelaInicial.html';
+        });
+    });
+    </script>
+
+</body>
+</html>

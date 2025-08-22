@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plataforma de Artes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+</head>
+<body>
+
+ <style>
+      .banner {
+      background-image: url('../imagens/CapaDeus.png');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 20px;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    .categoria-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        gap: 10px;
+        padding: 10px 0;
+        scrollbar-width: none;  /* Firefox */
+    }
+
+
+    @media (max-width: 992px) {
+      .categoria-container {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .categoria-container {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      }
+      
+      .categoria-btn {
+        padding: 6px 8px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .categoria-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .categoria-btn {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .categoria-container {
+        grid-template-columns: 1fr;
+      }
+    }
+        .categoria-btn {
+      border-radius: 50px;
+      border: 1px solid #0d6efd;
+      background-color: #f8f9fa;
+      color: #0d6efd;
+      padding: 8px 18px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+
+    .categoria-btn:hover {
+      background-color: #0d6efd;
+      color: white;
+      box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+      transform: translateY(-2px);
+    }
+
+        
+
+    .artist-img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .card-img-top {
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .publicar-section {
+      background-image: url('../imagens/pixacao.png');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .publicar-section .btn {
+      margin-top: 20px;
+    }
+
+    .img-vertical {
+      height: 150px;
+      width: 250;
+      object-fit: cover;
+    }
+
+    .scrolling-wrapper {
+      overflow-x: auto;
+      scrollbar-width: none; /* Para Firefox */
+      -ms-overflow-style: none; /* Para IE e Edge */
+    }
+
+    .scrolling-wrapper::-webkit-scrollbar {
+     display: none; /* Para Chrome, Safari e Opera */
+    }
+
+    .carousel-inner img {
+      height: 200px; 
+      object-fit: cover;
+    }
+
+    .navbar-nav .nav-link {
+     transition: color 0.3s ease, transform 0.3s ease;
+    }       
+
+    .navbar-nav .nav-link:hover {
+      color: #007bff;
+      transform: translateY(-2px);
+      font-weight: 500;
+    }
+
+    .icon-hover svg,
+    .navbar a.text-dark svg {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .icon-hover:hover svg,
+    .navbar a.text-dark:hover svg {
+      transform: scale(1.2);
+      color: #007bff;
+    }
+
+    .premium-section h2 {
+      font-size: 2rem;
+    }
+
+    .premium-section ul li {
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .premium-section .card-float {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      border-radius: 15px;
+      background-color: white;
+    }
+
+    .premium-section .card-float:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-assine {
+      background-color: #0d6efd;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .plano-card {
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: white;
+    }
+
+    .plano-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(255, 249, 249, 0.5);
+    }
+
+    .plano-card ul li {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .premium-section {
+      background: linear-gradient(135deg, #26b7f5, #86d2ec, #2c5364);
+      padding: 80px 0;
+    }
+
+    .plano-card {
+      background-color: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .plano-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+      border-color: #17c1e8;
+    }
+
+    .plano-card h4 {
+      font-size: 1.8rem;
+      color: #6e6e6e;
+    }
+
+    .plano-card ul li {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    .plano-card h3 {
+      font-size: 1.8rem;
+      background: linear-gradient(90deg, #17e817, #05c4ff);
+      -webkit-background-clip: text;
+    }
+
+    .btn-assinar {
+      margin-top: 15px;
+      font-weight: bold;
+      border-radius: 30px;
+      padding: 12px 30px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-assinar:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-basic {
+      background-color: transparent;
+      border: 2px solid #17c1e8;
+      color: #17c1e8;
+    }
+
+    .btn-basic:hover {
+      background-color: #17c1e8;
+      color: #fff;
+    }
+
+    .btn-premium {
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-premium:hover {
+      background: linear-gradient(90deg, #ee0979, #ff6a00);
+    }
+
+    .dropdown-toggle::after {
+        display: none !important;
+    }
+
+    .img-circular {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+   
+    .img-quadrada {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+ 
+
+
+
+
+/* Novos estilos para notificações e email */
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ff4757;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+   
+    .notification-wrapper {
+      position: relative;
+      margin-right: 15px;
+    }
+   
+    .notification-dropdown {
+      width: 350px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 0;
+    }
+   
+    .notification-item {
+      padding: 10px 15px;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.2s;
+    }
+   
+    .notification-item:hover {
+      background-color: #f8f9fa;
+    }
+   
+    .notification-item.unread {
+      background-color: #f8f9fa;
+    }
+   
+    .notification-time {
+      font-size: 12px;
+      color: #6c757d;
+    }
+   
+    .email-icon, .notification-icon {
+      font-size: 20px;
+      color: #0d0c22;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+   
+    .email-icon:hover, .notification-icon:hover {
+      color: #007bff;
+      transform: scale(1.2);
+    }
+   
+    .topbar-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+
+  </style>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4" style="background-color: #ffffff;">
+  <div class="container-fluid">
+
+    <!-- Logo + Nome -->
+    <a class="navbar-brand d-flex align-items-center me-4" href="#">
+      <img src="../imagens/logoNavBar.png" alt="Logo" style="width: 35px; margin-right: 10px;">
+      <span class="fw-bold">Malfatti</span>
+    </a>
+
+    <!-- Botão hamburguer responsivo -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menu da navbar -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Itens alinhados à esquerda -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="TelaInicial.html">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Eventos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Artistas</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Obras</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Entrar</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Criar conta</a></li>
+      </ul>
+
+      <!-- Pesquisa -->
+      <form class="d-flex me-3" role="search">
+        <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+      </form>
+
+      <!-- Ícones: Perfil e Carrinho -->
+      <div class="d-flex align-items-center gap-3">
+
+        <!-- Ícone de Perfil com Dropdown -->
+        <div class="dropdown">
+          <a class="text-dark dropdown-toggle" href="#" role="button" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 10c-1.105 0-2 .672-2 1.5S9.895 13 11 13s2-.672 2-1.5S12.105 10 11 10zm-2-1a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1c-2.21 0-4 1.343-4 3h8c0-1.657-1.79-3-4-3z"/>
+              <path fill-rule="evenodd" d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            </svg>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownPerfil">
+            <li><a class="dropdown-item" href="PerfilUsuario.html">Usuário</a></li>
+            <li><a class="dropdown-item" href="PerfilArtista.html">Artista</a></li>
+          </ul>
+        </div>
+
+        <!-- Ícone de Carrinho -->
+        <a href="#" class="text-dark">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+            class="bi bi-cart3" viewBox="0 0 16 16">
+            <path
+              d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+          </svg>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- Banner -->
+<div class="banner">
+  <h1>Descubra, siga e valorize artistas do mundo inteiro</h1>
+  <p>Música, Cinema, Literatura, Artes Visuais e muito mais</p>
+  <a href="#" class="btn btn-primary btn-lg">Comece a Explorar</a>
+</div>
+
+
+  <!-- Categoria -->
+<div class="container my-5">
+    <h4 class="mb-3">Categorias de Artes</h4>
+    <div class="categorias-wrapper">
+        <div class="categoria-container" id="categoriaContainer">
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaFotografia.html'">Fotografias</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaMusica.html'">Música</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaDanca.html'">Dança</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Literatura</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaCinema.html'">Cinema</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaTeatro.html'">Teatro</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaEscultura.html'">Escultura</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Pinturas</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Modelos</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Design</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Pinturas</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Desenhos</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Cêramica</button>
+            <button class="btn btn-outline-primary categoria-btn" onclick="window.location.href='TelaLiterario.html'">Arquitetura</button>
+           
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Recomendação Artistas - Carrossel Horizontal -->
+ <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="mb-0">Recomendações de Atores</h4>
+      <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+ 
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto text-center">
+
+    <div class="me-3">
+      <img src="../imagens/BIbi_Ferreira.webp"  class="img-circular">
+      <p class="mt-2">Bibi Ferreira</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Bruno_fagundes.webp"  class="img-circular">
+      <p class="mt-2">Bruno Fagundes</p>
+    </div>
+ 
+    <div class="me-3">
+      <img src="../imagens/Hugo_Bonemer.webp" class="img-circular">
+      <p class="mt-2">Hugo Bonemer</p>
+        </div>
+ 
+        <div class="me-3">
+      <img src="../imagens/Matheus-Nachtergaele.webp" class="img-circular">
+      <p class="mt-2">Matheus Natchtergaele</p>
+    </div>
+
+     <div class="me-3">
+      <img src="../imagens/Lazaro_ramos.webp" class="img-circular">
+      <p class="mt-2">Lázaro Ramos</p>
+    </div>
+
+    <div class="me-3">
+      <img  src="../imagens/Fernanda_montenegro.jpg" class="img-circular">
+      <p class="mt-2">Fernanda Montenegro</p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Recomendações de filmagens com Carrossel Horizontal -->
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Peças Teatrais</h4>
+    <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto">
+
+    <div class="me-3" style="min-width: 400px;" onmouseenter="startVideo(this)" onmouseleave="stopVideo(this)">
+      <video muted loop playsinline class="img-quadrada">
+        <source src="../Videos/video1.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;" onmouseenter="startVideo(this)" onmouseleave="stopVideo(this)">
+      <video muted loop playsinline class="img-quadrada">
+        <source src="../Videos/video2.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;" onmouseenter="startVideo(this)" onmouseleave="stopVideo(this)">
+      <video muted loop playsinline class="img-quadrada">
+        <source src="../Videos/video3.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;" onmouseenter="startVideo(this)" onmouseleave="stopVideo(this)">
+      <video muted loop playsinline class="img-quadrada">
+        <source src="../Videos/video4.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;" onmouseenter="startVideo(this)" onmouseleave="stopVideo(this)">
+      <video muted loop playsinline class="img-quadrada">
+        <source src="../Videos/video5.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;" onmouseenter="startVideo(this)" onmouseleave="stopVideo(this)">
+      <video muted loop playsinline class="img-quadrada">
+        <source src="../Videos/video6.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="card me-3" style="min-width: 400px;" onmouseenter="startVideo(this)" onmouseleave="stopVideo(this)">
+      <video muted loop playsinline class="img-quadrada">
+        <source src="../Videos/video7.mp4" type="video/mp4">
+      </video>
+    </div>
+
+  </div>
+</div>
+<!-- Dá espaços ao container-->
+<div class="container-fluid mt-5"></div>
+
+
+
+<!-- Dá espaços ao container-->
+<div class="container-fluid mt-5"></div>
+
+<!-- Companhias Teatrais - Carrossel Horizontal -->
+ <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="mb-0">Companhias Teatrais</h4>
+      <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+  
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto text-center">
+
+    <div class="me-3">
+      <img src="../imagens/Cia. Mungunzá de Teatro.jpg" class="img-circular" >
+      <p class="mt-2">Cia. Mungunzá de Teatro</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Cia. Vagalum Tum Tum.jpg"  class="img-circular">
+      <p class="mt-2">Cia. Vagalum Tum Tum</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Coletivo ALMA.jpg"  class="img-circular">
+      <p class="mt-2">Coletivo Alma</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Teatro Kunyn.jpg"  class="img-circular">
+      <p class="mt-2">Teatro Kunyn</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Cia nissi.jpg"  class="img-circular">
+      <p class="mt-2">Cia. Nissi</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Grupo Galpão.jpg"  class="img-circular">
+      <p class="mt-2">Grupo Galpão</p>
+    </div>
+    
+    <div class="me-3">
+      <img src="../imagens/Cia. Luna Lunera.jpg"  class="img-circular">
+      <p class="mt-2">Cia. Luna Lunera</p>
+    </div>
+
+     <div class="me-3">
+      <img src="../imagens/TODA DESEO.jpg
+      "  class="img-circular">
+      <p class="mt-2">TODA DESEO</p>
+    </div>
+  </div>
+</div>
+
+<!-- Dá espaços ao container-->
+<div class="container-fluid mt-5"></div>
+
+<!-- Figurinos -->
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Figurinistas</h4>
+    <a href="#" class="text-primary text-decoration-none fs-6">Ver mais</a>
+  </div>
+
+  <div class="scrolling-wrapper d-flex flex-nowrap overflow-auto text-center">
+
+    <div class="me-3">
+      <img src="../imagens/Claudio.Tovar.jpg" class="img-circular">
+      <p class="mt-2">Claudio Tovar</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Chico_Spinoza.jpg" class="img-circular">
+      <p class="mt-2">Chico Spinoza</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Heidi.Bivens.webp" class="img-circular">
+      <p class="mt-2">Heidi Bivens</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Colleen.Atwood.webp" class="img-circular">
+      <p class="mt-2">Colleen Atwood</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Milena.Canonero.webp" class="img-circular">
+      <p class="mt-2">Milena Canonero</p>
+    </div>
+
+    <div class="me-3">
+      <img src="../imagens/Marilia.Craneiro.webp" class="img-circular">
+      <p class="mt-2">Marília Carneiro</p>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- Rodapé (Saiba Mais) -->
+<footer class="text-white py-5 mt-5" style="background-color: #000;">
+  <div class="container">
+    <div class="row">
+
+      <!-- Produtos -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">PRODUTOS</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Área Premium</a></li>
+        </ul>
+      </div>
+
+      <!-- Suporte -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">SUPORTE</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Como podemos ajudar?</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Atualizações de Classe</a></li>
+          <li><a href="#" class="text-white text-decoration-none">Dúvidas Frequentes</a></li>
+          <li><a href="#" class="text-white text-decoration-none">O que é a Área Premium?</a></li>
+        </ul>
+      </div>
+
+      <!-- Informação Corporativa -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">INFORMAÇÃO CORPORATIVA</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-white text-decoration-none">Sobre nós</a></li>
+        </ul>
+      </div>
+
+      <!-- Siga-nos -->
+      <div class="col-md-3 mb-4">
+        <h6 class="fw-bold">SIGA-NOS</h6>
+        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="text-white me-3 fs-5"><i class="bi bi-youtube"></i></a>
+        <a href="#" class="text-white fs-5"><i class="bi bi-x"></i></a>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+
+
+<!-- Bootstrap JS -->
+<script  src="../Assents/TelaCinema.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>

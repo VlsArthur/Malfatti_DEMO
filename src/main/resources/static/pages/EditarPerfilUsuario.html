@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malfatti - Cadastro do Cliente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #0b5ed7;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #495057;
+            --sidebar-bg: #f8f9fa;
+        }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            padding-top: 70px;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid #dee2e6;
+            height: calc(100vh - 70px);
+            position: fixed;
+            top: 70px;
+            left: 0;
+            overflow-y: auto;
+            padding: 20px;
+            z-index: 900;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+        
+        .sidebar-section-title {
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 10px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .sidebar-section-title::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 6px;
+            width: 3px;
+            height: 20px;
+            background-color: var(--primary-color);
+        }
+        
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .sidebar-item:hover {
+            background-color: #e9ecef;
+        }
+        
+        .sidebar-item.active {
+            background-color: #e3f0ff;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .sidebar-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 800;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .profile-img-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-right: 25px;
+        }
+        
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .profile-img-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .profile-img:hover .profile-img-overlay {
+            opacity: 1;
+        }
+        
+        .remove-photo {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s ease;
+        }
+        
+        .remove-photo:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+        
+        .profile-img-container:hover .remove-photo {
+            display: flex;
+        }
+        
+        .profile-info h2 {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+        
+        .profile-info p {
+            color: #6c757d;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .custom-input {
+            width: 100%;
+            min-height: 50px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #fff;
+            resize: vertical;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+       
+        .custom-input:focus {
+            outline: none;
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+       
+        .custom-input::placeholder {
+            color: #adb5bd;
+        }
+       
+        .section-title {
+            font-weight: 600;
+            color: #495057;
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-box {
+            background-color: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 25px;
+            min-height: 100px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .bio-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #fff;
+            resize: vertical;
+            transition: all 0.3s;
+            font-size: 16px;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+        
+        .bio-textarea:focus {
+            outline: none;
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        
+        .bio-textarea::placeholder {
+            color: #adb5bd;
+        }
+        
+        /* RODAPÉ QUE COBRE TODA A LARGURA INCLUINDO O MENU */
+        .footer-container {
+            position: relative;
+            width: 100%;
+            background-color: var(--light-gray);
+            border-top: 1px solid var(--medium-gray);
+            padding: 30px 0;
+            z-index: 1000;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        /* Para cobrir a área do menu lateral */
+        .footer-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100%;
+            background-color: var(--light-gray);
+            z-index: -1;
+        }
+        
+        .footer-links a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Navbar adjustments */
+        .navbar-nav .nav-link {
+            transition: color 0.3s ease, transform 0.3s ease;
+            font-weight: 500;
+            padding: 8px 15px;
+        }       
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
+        }
+
+        .icon-hover:hover svg,
+        .navbar a.text-dark:hover svg {
+            transform: scale(1.2);
+            color: var(--primary-color);
+        }
+        
+        .dropdown-toggle::after {
+            display: none;
+        }
+        
+        .dropdown-menu {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            border: none;
+        }
+        
+        .dropdown-item {
+            padding: 8px 15px;
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--light-gray);
+            color: var(--primary-color);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        /* Save button */
+        .save-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        /* Custom styles for user profile */
+        .name-fields {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .name-field {
+            flex: 1;
+        }
+
+        /* Address fields styling */
+        .address-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .address-primary {
+            flex: 2;
+        }
+        
+        .address-secondary {
+            flex: 1;
+        }
+        
+        .address-equal {
+            flex: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        /* Interests section */
+        .interests-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .interest-item {
+            background-color: #e9ecef;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .interest-item:hover {
+            background-color: #d3d9df;
+        }
+        
+        .interest-item.selected {
+            background-color: #0d6efd;
+            color: white;
+        }
+        
+        .interest-item i {
+            font-size: 12px;
+        }
+        
+        /* Photo upload notification */
+        .upload-notification {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+        }
+        
+        .upload-notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+            
+            .main-content {
+                margin-left: 220px;
+            }
+            
+            .footer-container::before {
+                width: 220px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                top: 0;
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-img-container {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .profile-actions {
+                justify-content: center;
+            }
+            
+            .name-fields,
+            .address-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .footer-container::before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Upload notification -->
+    <div class="upload-notification" id="uploadNotification">
+        <i class="fas fa-check-circle me-2"></i>
+        Foto atualizada com sucesso!
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center me-4" href="#">
+        <img src="../imagens/logoNavBar.png" alt="Logo" style="width: 35px; margin-right: 10px;">
+        <span class="fw-bold">Malfatti</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="TelaInicial.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Eventos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Artistas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Obras</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Entrar</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Criar conta</a></li>
+        </ul>
+
+        <form class="d-flex me-3" role="search">
+          <input class="form-control me-2" type="search" placeholder="Pesquisar">
+        </form>
+
+        <div class="d-flex align-items-center gap-3">
+          <div class="dropdown">
+          <a class="text-dark dropdown-toggle" href="#" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-5"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownPerfil">
+            <li><a class="dropdown-item" href="PerfilUsuario.html">Usuário</a></li>
+            <li><a class="dropdown-item" href="PerfilArtista.html">Artista</a></li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        
+        <div class="sidebar-section">
+            <h5 class="sidebar-section-title">Geral</h5>
+            
+            <div class="sidebar-item active">
+                <i class="fas fa-user-edit"></i>
+                <span>Editar Perfil</span>
+            </div>
+            
+            <div class="sidebar-item">
+                <i class="fas fa-key"></i>
+                <span>Senha</span>
+            </div>
+            
+            <div class="sidebar-item">
+                <i class="fas fa-share-alt"></i>
+                <span>Redes Sociais</span>
+            </div>
+            
+            <div class="sidebar-item">
+                <i class="fas fa-bell"></i>
+                <span>Notificações</span>
+            </div>
+            
+            <div class="sidebar-item">
+                <i class="fas fa-user-clock"></i>
+                <span>Sessões</span>
+            </div>
+        </div>
+        
+        <div class="sidebar-section">
+            <h5 class="sidebar-section-title">Premium</h5>
+            
+            <div class="sidebar-item">
+                <i class="fas fa-crown"></i>
+                <span>Vire Premium</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="profile-header">
+            <div class="profile-img-container">
+                <div class="profile-img" id="profileImage">
+                    <i class="fas fa-camera"></i>
+                    <div class="profile-img-overlay">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <button class="remove-photo" id="removePhoto" title="Remover foto">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="profile-info">
+                <h2>Complete seu perfil</h2>
+                <p>Adicione suas informações para começar</p>
+                <div class="profile-actions">
+                    <input type="file" class="file-input" id="photoInput" accept="image/*">
+                    <button class="btn btn-outline-primary" id="addPhotoBtn">
+                        <i class="fas fa-camera me-2"></i> Adicionar Foto
+                    </button>
+                    <button class="btn btn-outline-secondary" id="changePhotoBtn" style="display: none;">
+                        <i class="fas fa-sync me-2"></i> Trocar Foto
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <h5 class="section-title">
+                <i class="fas fa-user section-icon"></i> Informações do Perfil
+            </h5>
+            
+            <div class="name-fields">
+                <div class="form-group name-field">
+                    <label class="form-label">Nome</label>
+                    <input type="text" class="custom-input" placeholder="Digite seu nome">
+                </div>
+                <div class="form-group name-field">
+                    <label class="form-label">Sobrenome</label>
+                    <input type="text" class="custom-input" placeholder="Digite seu sobrenome">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Nome de Usuário</label>
+                <input type="text" class="custom-input" placeholder="Adicione o nome do seu perfil">
+            </div>
+            
+            <!-- Address Fields Section -->
+            <div class="address-row">
+                <div class="form-group address-primary">
+                    <label class="form-label">Logradouro</label>
+                    <input type="text" class="custom-input" placeholder="Rua, Avenida, etc.">
+                </div>
+                <div class="form-group address-secondary">
+                    <label class="form-label">Número</label>
+                    <input type="text" class="custom-input" placeholder="Nº">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Bairro</label>
+                <input type="text" class="custom-input" placeholder="Digite o bairro">
+            </div>
+            
+            <div class="address-row">
+                <div class="form-group address-equal">
+                    <label class="form-label">Cidade</label>
+                    <input type="text" class="custom-input" placeholder="Digite a cidade">
+                </div>
+                <div class="form-group address-equal">
+                    <label class="form-label">Estado</label>
+                    <input type="text" class="custom-input" placeholder="Digite o estado">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Interesses Artísticos</label>
+                <div class="interests-container">
+                    <div class="interest-item">Arte Contemporânea</div>
+                    <div class="interest-item">Arte Digital</div>
+                    <div class="interest-item">Escultura</div>
+                    <div class="interest-item">Fotografia</div>
+                    <div class="interest-item">Instalações</div>
+                    <div class="interest-item">Pintura</div>
+                    <div class="interest-item">Teatro</div>
+                    <div class="interest-item">Música</div>
+                    <div class="interest-item">Dança</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <h5 class="section-title">
+                <i class="fas fa-book section-icon"></i> Sobre Mim
+            </h5>
+            <textarea class="bio-textarea" placeholder="Escreva sobre você"></textarea>
+        </div>
+        
+        <div class="content-box">
+            <h5 class="section-title">
+                <i class="fas fa-globe section-icon"></i> Website & Redes Sociais
+            </h5>
+            <div class="form-group">
+                <label class="form-label">Website</label>
+                <input type="text" class="custom-input" placeholder="https://seusite.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Instagram</label>
+                <input type="text" class="custom-input" placeholder="@seuinstagram">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Twitter</label>
+                <input type="text" class="custom-input" placeholder="@seutwitter">
+            </div>
+            <div class="form-group">
+                <label class="form-label">LinkedIn</label>
+                <input type="text" class="custom-input" placeholder="@seulinkedin">
+            </div>
+        </div>
+        
+        <div class="save-container">
+            <button class="btn btn-primary btn-lg">
+                <i class="fas fa-save me-2"></i> Salvar Perfil
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Container que cobre toda a largura, incluindo o menu -->
+    <div class="footer-container">
+        <div class="footer-content">
+            <p class="mb-3">© 2023 Malfatti - Plataforma de Artistas. Todos os direitos reservados.</p>
+            <div class="footer-links">
+                <a href="#">Termos de Uso</a>
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Contato</a>
+                <a href="#">Sobre Nós</a>
+                <a href="#">Ajuda</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let base64Image = null;
+        class ProfilePhotoManager {
+            constructor() {
+                this.photoInput = document.getElementById('photoInput');
+                this.profileImage = document.getElementById('profileImage');
+                this.addPhotoBtn = document.getElementById('addPhotoBtn');
+                this.changePhotoBtn = document.getElementById('changePhotoBtn');
+                this.removePhotoBtn = document.getElementById('removePhoto');
+                this.uploadNotification = document.getElementById('uploadNotification');
+                this.currentPhotoUrl = null;
+                
+                this.initializeEventListeners();
+            }
+            
+            initializeEventListeners() {
+                // Clique no botão adicionar foto
+                this.addPhotoBtn.addEventListener('click', () => {
+                    this.photoInput.click();
+                });
+                
+                // Clique no botão trocar foto
+                this.changePhotoBtn.addEventListener('click', () => {
+                    this.photoInput.click();
+                });
+                
+                // Clique diretamente na imagem
+                this.profileImage.addEventListener('click', () => {
+                    this.photoInput.click();
+                });
+                
+                // Mudança no input de arquivo
+                this.photoInput.addEventListener('change', (e) => {
+                    this.handleFileSelect(e.target.files[0]);
+                });
+                
+                // Botão remover foto
+                this.removePhotoBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removePhoto();
+                });
+                
+                // Drag and drop
+                this.profileImage.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    this.profileImage.style.transform = 'scale(1.05)';
+                });
+                
+                this.profileImage.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    this.profileImage.style.transform = 'scale(1)';
+                });
+                
+                this.profileImage.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    this.profileImage.style.transform = 'scale(1)';
+                    const file = e.dataTransfer.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        this.handleFileSelect(file);
+                    }
+                });
+            }
+            
+            handleFileSelect(file) {
+                if (!file) return;
+                
+                // Validar tipo de arquivo
+                if (!file.type.startsWith('image/')) {
+                    this.showError('Por favor, selecione apenas arquivos de imagem.');
+                    return;
+                }
+                
+                // Validar tamanho (máximo 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    this.showError('A imagem deve ter no máximo 5MB.');
+                    return;
+                }
+                
+                // Criar URL da imagem
+                const imageUrl = URL.createObjectURL(file);
+                
+                // Criar elemento de imagem para validar dimensões
+                const img = new Image();
+                img.onload = () => {
+                    // Validar dimensões mínimas
+                    if (img.width < 150 || img.height < 150) {
+                        this.showError('A imagem deve ter pelo menos 150x150 pixels.');
+                        URL.revokeObjectURL(imageUrl);
+                        return;
+                    }
+                    
+                    this.setProfilePhoto(imageUrl, file);
+
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        base64Image = reader.result;
+                    };
+                    reader.readAsDataURL(file);
+                };
+                img.src = imageUrl;
+            }
+            
+            setProfilePhoto(imageUrl, file) {
+                // Remover URL anterior se existir
+                if (this.currentPhotoUrl) {
+                    URL.revokeObjectURL(this.currentPhotoUrl);
+                }
+                
+                // Limpar conteúdo atual
+                this.profileImage.innerHTML = '';
+                
+                // Criar elemento de imagem
+                const imgElement = document.createElement('img');
+                imgElement.src = imageUrl;
+                imgElement.alt = 'Foto do perfil';
+                
+                this.profileImage.appendChild(imgElement);
+                
+                // Criar overlay para hover
+                const overlay = document.createElement('div');
+                overlay.className = 'profile-img-overlay';
+                overlay.innerHTML = '<i class="fas fa-sync"></i>';
+                this.profileImage.appendChild(overlay);
+                
+                // Atualizar estado
+                this.currentPhotoUrl = imageUrl;
+                
+                // Atualizar interface
+                this.addPhotoBtn.style.display = 'none';
+                this.changePhotoBtn.style.display = 'inline-block';
+                
+                // Mostrar notificação
+                this.showSuccess('Foto atualizada com sucesso!');
+                
+                // Simular upload (aqui você faria a requisição real para o servidor)
+                this.simulateUpload(file);
+            }
+            
+            removePhoto() {
+                // Remover URL se existir
+                if (this.currentPhotoUrl) {
+                    URL.revokeObjectURL(this.currentPhotoUrl);
+                    this.currentPhotoUrl = null;
+                }
+                
+                // Restaurar estado inicial
+                this.profileImage.innerHTML = `
+                    <i class="fas fa-camera"></i>
+                    <div class="profile-img-overlay">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                `;
+                
+                // Atualizar interface
+                this.addPhotoBtn.style.display = 'inline-block';
+                this.changePhotoBtn.style.display = 'none';
+                
+                // Limpar input
+                this.photoInput.value = '';
+                
+                // Mostrar notificação
+                this.showSuccess('Foto removida com sucesso!');
+            }
+            
+            simulateUpload(file) {
+                // Aqui você implementaria o upload real para o servidor
+                // Por exemplo, usando FormData e fetch:
+                
+                /*
+                const formData = new FormData();
+                formData.append('profile_photo', file);
+                
+                fetch('/api/upload-profile-photo', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Upload realizado com sucesso:', data);
+                })
+                .catch(error => {
+                    console.error('Erro no upload:', error);
+                    this.showError('Erro ao fazer upload da imagem.');
+                });
+                */
+                
+                console.log('Simulando upload do arquivo:', file.name, 'Tamanho:', file.size, 'bytes');
+            }
+            
+            showSuccess(message) {
+                this.uploadNotification.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>
+                    ${message}
+                `;
+                this.uploadNotification.className = 'upload-notification show';
+                this.uploadNotification.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    this.uploadNotification.classList.remove('show');
+                }, 3000);
+            }
+            
+            showError(message) {
+                this.uploadNotification.innerHTML = `
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    ${message}
+                `;
+                this.uploadNotification.className = 'upload-notification show';
+                this.uploadNotification.style.background = '#dc3545';
+                
+                setTimeout(() => {
+                    this.uploadNotification.classList.remove('show');
+                }, 4000);
+            }
+        }
+        
+        // Inicializar o gerenciador de fotos quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            new ProfilePhotoManager();
+        });
+        
+        // Funcionalidades do formulário
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            // Coletar dados do formulário
+            const formData = {
+                nome: document.querySelector('input[placeholder="Digite seu nome"]').value,
+                sobrenome: document.querySelector('input[placeholder="Digite seu sobrenome"]').value,
+                usuario: document.querySelector('input[placeholder="Adicione o nome do seu perfil"]').value,
+                logradouro: document.querySelector('input[placeholder="Rua, Avenida, etc."]').value,
+                numero: document.querySelector('input[placeholder="Nº"]').value,
+                bairro: document.querySelector('input[placeholder="Digite o bairro"]').value,
+                cidade: document.querySelector('input[placeholder="Digite a cidade"]').value,
+                estado: document.querySelector('input[placeholder="Digite o estado"]').value,
+                biografia: document.querySelector('.bio-textarea').value,
+                website: document.querySelector('input[placeholder="https://seusite.com"]').value,
+                instagram: document.querySelector('input[placeholder="@seuinstagram"]').value,
+                twitter: document.querySelector('input[placeholder="@seutwitter"]').value,
+                linkedin: document.querySelector('input[placeholder="@seulinkedin"]').value
+            };
+            
+            // Coletar interesses selecionados
+            const interessesSelecionados = Array.from(document.querySelectorAll('.interest-item.selected'))
+                .map(item => item.textContent);
+            formData.interesses = interessesSelecionados;
+            
+            // Validar campos obrigatórios
+            if (!formData.nome || !formData.sobrenome || !formData.usuario) {
+                alert('Por favor, preencha pelo menos o nome, sobrenome e nome de usuário.');
+                return;
+            }
+            
+            console.log('Dados do perfil:', formData);
+            
+            fetch('http://localhost:8080/api/usuarios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: localStorage.emailUsuario,
+                    fotoPerfil: base64Image,
+                    nome: formData.nome + " " + formData.sobrenome,
+                    usuario: formData.usuario,
+                    logradouro: formData.logradouro,
+                    numero: formData.numero,
+                    bairro: formData.bairro,
+                    cidade: formData.cidade,
+                    estado: formData.estado,
+                    tipoUsuario: 'COMUM',
+                    experiencia: formData.portfolio,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Salvar dados completos do usuário no localStorage
+                localStorage.setItem('usuarioLogado', JSON.stringify(data));
+                localStorage.setItem('idUsuario', data.id);
+
+                alert('Perfil salvo com sucesso!');
+                window.location.href = "TelaInicial.html";
+            })
+            .catch(error => console.error(error));
+        });
+        
+        // Adicionar efeito de item ativo na sidebar
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Seleção de interesses
+        document.querySelectorAll('.interest-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                
+                // Adicionar ou remover ícone de check
+                const checkIcon = this.querySelector('i');
+                if (this.classList.contains('selected')) {
+                    if (!checkIcon) {
+                        const icon = document.createElement('i');
+                        icon.className = 'fas fa-check';
+                        this.appendChild(icon);
+                    }
+                } else {
+                    if (checkIcon) {
+                        checkIcon.remove();
+                    }
+                }
+            });
+        });
+        
+        // Efeitos de animação nos inputs
+        document.querySelectorAll('.custom-input, .bio-textarea').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 4px 12px rgba(13, 110, 253, 0.15)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 0 0 0.25rem rgba(13, 110, 253, 0.25)';
+            });
+        });
+    </script>
+</body>
+</html>

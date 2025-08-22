@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Malfatti</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2d9d5a64d.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .container-fluid {
+      display: flex;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .left-side {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+    .left-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .right-side {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .login-box {
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .btn-dark-rounded {
+      background-color: #0d0d0d;
+      border: none;
+      border-radius: 70px;
+      padding: 10px;
+      font-weight: bold;
+    }
+    .form-control {
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #000;
+    }
+    .divider:not(:empty)::before {
+      margin-right: .75em;
+    }
+    .divider:not(:empty)::after {
+      margin-left: .75em;
+    }
+    
+    /* Estilos para tela de integração */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding-top: 150px;
+    }
+
+    .logo-header {
+      position: absolute; 
+      top: 20px; 
+      left: 20px; 
+      display: flex; 
+      align-items: center;
+    }
+
+    .choice-box {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.2s ease-in-out;
+      background: white;
+      cursor: pointer;
+    }
+
+    .choice-box:hover {
+      border-color: #2563eb;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transform: translateY(-3px);
+    }
+
+    .choice-icon {
+      font-size: 2.5rem;
+      color: #2563eb;
+      margin-bottom: 15px;
+    }
+
+    .error-message {
+      color: #dc3545;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .container-fluid {
+        flex-direction: column;
+      }
+      .left-side {
+        display: none;
+      }
+      .right-side {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-fluid">
+    <!-- Lado esquerdo com imagem -->
+    <div class="left-side">
+      <img src="../imagens/banner4.png" alt="Arte decorativa">
+    </div>
+    
+    <!-- Lado direito com formulário de login -->
+    <div class="right-side">
+      <div class="login-box">
+        <!-- Tela de Login -->
+        <div id="loginScreen">
+          <img src="../imagens/logoNavBar.png" alt="Logo" class="mb-3" style="width: 50px;">
+          <h4 class="mb-4">Bem Vindo!</h4>
+          
+          <!-- Botão Google -->
+          <button class="btn btn-outline-secondary w-100 mb-3 d-flex align-items-center justify-content-center" style="border-radius: 40px;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" style="width:24px; height:24px; margin-right:10px;">
+            Continuar com Google
+          </button>
+
+          <!-- Separador -->
+          <div class="divider">ou</div>
+
+          <!-- Campo email -->
+          <input type="email" id="emailLogin" class="form-control mb-3" placeholder="Digite seu e-mail">
+          
+          <div class="error-message" id="emailLoginError">Este e-mail não é válido.</div>
+
+          <!-- Botão continuar -->
+          <button class="btn btn-dark w-100 text-white" id="continuarLogin" style="border-radius: 40px; border: 2px solid #0d0d0d;">Continue</button>
+
+          <!-- Termos -->
+          <p class="mt-3 small text-muted">
+            Ao continuar, você concorda com nossos <a href="#">Termos</a> e <a href="#">Política de Privacidade</a>.
+          </p>
+
+          <!-- Link cadastro -->
+          <p class="mt-2">
+            Não tem uma conta? <a href="#" id="cadastroLink">Cadastre-se</a>
+          </p>
+        </div>
+
+        <!-- Tela de Verificação do Login -->
+        <div id="verificacaoLoginScreen" style="display: none;">
+          <img src="../imagens/logoNavBar.png" alt="Logo" class="mb-3" style="width: 50px;">
+          <h4 class="mb-4">Verificação de Login</h4>
+          <p class="mb-4">Digite o código enviado para seu e-mail:</p>
+
+          <!-- Campo código -->
+          <input type="text" id="codigoVerificacaoLogin" class="form-control mb-3" placeholder="Digite o código de 6 dígitos" maxlength="6">
+
+          <div class="error-message" id="codigoLoginError">Código incorreto. Tente novamente.</div>
+
+          <!-- Botão verificar -->
+          <button class="btn btn-dark w-100 text-white" id="verificarCodigoLogin" style="border-radius: 40px; border: 2px solid #0d0d0d;">Verificar e Entrar</button>
+
+          <!-- Reenviar código -->
+          <p class="mt-3">
+            Não recebeu o código? <a href="#" id="reenviarCodigoLogin">Reenviar</a>
+          </p>
+
+          <!-- Voltar -->
+          <p class="mt-2">
+            <a href="#" id="voltarParaLogin">← Voltar</a>
+          </p>
+        </div>
+
+        <!-- Tela de Cadastro -->
+        <div id="cadastroScreen" style="display: none;">
+          <img src="../imagens/logoNavBar.png" alt="Logo" class="mb-3" style="width: 50px;">
+          <h4 class="mb-4">Criar Conta</h4>
+
+          <!-- Campo email -->
+          <input type="email" id="emailCadastro" class="form-control mb-3" placeholder="Digite seu e-mail">
+          
+          <div class="error-message" id="emailError">Este e-mail não é válido.</div>
+
+          <!-- Botão enviar código -->
+          <button class="btn btn-dark w-100 text-white" id="enviarCodigo" style="border-radius: 40px; border: 2px solid #0d0d0d;">Enviar Código de Verificação</button>
+
+          <!-- Termos -->
+          <p class="mt-3 small text-muted">
+            Ao continuar, você concorda com nossos <a href="#">Termos</a> e <a href="#">Política de Privacidade</a>.
+          </p>
+
+          <!-- Voltar ao login -->
+          <p class="mt-2">
+            Já tem uma conta? <a href="#" id="voltarLogin">Entrar</a>
+          </p>
+        </div>
+
+        <!-- Tela de Verificação do Cadastro -->
+        <div id="verificacaoScreen" style="display: none;">
+          <img src="../imagens/logoNavBar.png" alt="Logo" class="mb-3" style="width: 50px;">
+          <h4 class="mb-4">Verificação</h4>
+          <p class="mb-4">Digite o código enviado para seu e-mail:</p>
+
+          <!-- Campo código -->
+          <input type="text" id="codigoVerificacao" class="form-control mb-3" placeholder="Digite o código de 6 dígitos" maxlength="6">
+
+          <div class="error-message" id="codigoError">Código incorreto. Tente novamente.</div>
+
+          <!-- Botão verificar -->
+          <button class="btn btn-dark w-100 text-white" id="verificarCodigo" style="border-radius: 40px; border: 2px solid #0d0d0d;">Verificar Código</button>
+
+          <!-- Reenviar código -->
+          <p class="mt-3">
+            Não recebeu o código? <a href="#" id="reenviarCodigo">Reenviar</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tela de Integração (oculta inicialmente) -->
+  <div id="integracaoScreen" style="display: none; background: #f9fafb; min-height: 100vh;">
+    <!-- Logo e texto -->
+    <div class="logo-header">
+        <img src="../imagens/logoNavBar.png" alt="Logo Malfatti" style="height: 50px; margin-right: 12px;">
+        <span style="font-size: 1.8rem; font-weight: bold; color: #000;">Malfatti</span>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="container main-content">
+      <h1 class="text-center mb-2">Integração</h1>
+      <p class="text-center text-muted mb-5">Para começar, selecione se você é artista ou cliente.</p>
+
+      <div class="row justify-content-center g-4">
+        <div class="col-md-4">
+          <div class="choice-box" id="escolhaArtista">
+            <div class="choice-icon">
+              <i class="fas fa-paint-brush"></i>
+            </div>
+            <h5>Sou Artista</h5>
+            <p>Cadastre-se para publicar seus trabalhos e alcançar clientes.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="choice-box" id="escolhaCliente">
+            <div class="choice-icon">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <h5>Sou Cliente</h5>
+            <p>Cadastre-se para contratar artistas e explorar obras.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Elementos do DOM
+    const loginScreen = document.getElementById('loginScreen');
+    const verificacaoLoginScreen = document.getElementById('verificacaoLoginScreen');
+    const cadastroScreen = document.getElementById('cadastroScreen');
+    const verificacaoScreen = document.getElementById('verificacaoScreen');
+    const integracaoScreen = document.getElementById('integracaoScreen');
+
+    // Verificar se deve mostrar tela de cadastro baseado no hash da URL
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.location.hash === '#cadastro') {
+        loginScreen.style.display = 'none';
+        cadastroScreen.style.display = 'block';
+      }
+    });
+    
+    // Links e botões
+    const cadastroLink = document.getElementById('cadastroLink');
+    const voltarLogin = document.getElementById('voltarLogin');
+    const continuarLogin = document.getElementById('continuarLogin');
+    const voltarParaLogin = document.getElementById('voltarParaLogin');
+    const enviarCodigo = document.getElementById('enviarCodigo');
+    const verificarCodigo = document.getElementById('verificarCodigo');
+    const verificarCodigoLogin = document.getElementById('verificarCodigoLogin');
+    const reenviarCodigo = document.getElementById('reenviarCodigo');
+    const reenviarCodigoLogin = document.getElementById('reenviarCodigoLogin');
+    
+    // Campos de input
+    const emailLogin = document.getElementById('emailLogin');
+    const emailCadastro = document.getElementById('emailCadastro');
+    const codigoVerificacao = document.getElementById('codigoVerificacao');
+    const codigoVerificacaoLogin = document.getElementById('codigoVerificacaoLogin');
+    
+    // Mensagens de erro
+    const emailLoginError = document.getElementById('emailLoginError');
+    const emailError = document.getElementById('emailError');
+    const codigoError = document.getElementById('codigoError');
+    const codigoLoginError = document.getElementById('codigoLoginError');
+    
+    // Escolhas
+    const escolhaArtista = document.getElementById('escolhaArtista');
+    const escolhaCliente = document.getElementById('escolhaCliente');
+
+    let codigoCorreto = '';
+    let codigoCorretoLogin = '';
+
+    // Função para validar email
+    function validarEmail(email) {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
+    // Função para gerar código de verificação
+    function gerarCodigo() {
+      return Math.floor(123456).toString();
+    }
+
+    // Event Listeners para navegação entre telas
+    cadastroLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginScreen.style.display = 'none';
+      cadastroScreen.style.display = 'block';
+    });
+
+    voltarLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      cadastroScreen.style.display = 'none';
+      loginScreen.style.display = 'block';
+    });
+
+    voltarParaLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      verificacaoLoginScreen.style.display = 'none';
+      loginScreen.style.display = 'block';
+    });
+
+    // Login flow
+    continuarLogin.addEventListener('click', () => {
+      const email = emailLogin.value.trim();
+      
+      if (!email) {
+        emailLoginError.textContent = 'Por favor, digite um e-mail.';
+        emailLoginError.style.display = 'block';
+        return;
+      }
+
+      if (!validarEmail(email)) {
+        emailLoginError.textContent = 'Este e-mail não é válido.';
+        emailLoginError.style.display = 'block';
+        return;
+      }
+
+      let emailCadastrado = false;
+
+      fetch(`http://localhost:8080/api/usuarios/email/${email}`)
+        .then(response => {
+          if (response.ok) {
+            emailCadastrado = true;
+            return response.json();
+          } else {
+            throw new Error('E-mail não cadastrado');
+          }
+        })
+        .then(data => {
+          console.log('Usuário encontrado:', data);
+          localStorage.setItem('idUsuario', data.id);
+        })
+        .catch(error => {
+          console.error('Erro ao buscar usuário:', error);
+          emailLoginError.textContent = 'E-mail não cadastrado.';
+          emailLoginError.style.display = 'block';
+          return;
+        });
+
+      emailLoginError.style.display = 'none';
+      
+      // Simular envio de código para login
+      codigoCorretoLogin = gerarCodigo();
+      console.log('Código de login enviado:', codigoCorretoLogin);
+      
+      loginScreen.style.display = 'none';
+      verificacaoLoginScreen.style.display = 'block';
+    });
+
+    verificarCodigoLogin.addEventListener('click', () => {
+  const codigoDigitado = codigoVerificacaoLogin.value.trim();
+  
+  if (codigoDigitado !== codigoCorretoLogin) {
+    codigoLoginError.textContent = 'Código incorreto. Tente novamente.';
+    codigoLoginError.style.display = 'block';
+    return;
+  }
+
+  const email = emailLogin.value.trim();
+  
+  fetch(`http://localhost:8080/api/usuarios/email/${email}`)
+    .then(response => {
+      if (!response.ok) throw new Error('Erro ao buscar usuário');
+      return response.json();
+    })
+    .then(usuario => {
+      // Armazena TODOS os dados do usuário
+      localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+      
+      // Redireciona para a tela inicial
+      window.location.href = 'TelaInicial.html';
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+      alert('Erro ao fazer login');
+    });
+});
+
+    reenviarCodigoLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      codigoCorretoLogin = gerarCodigo();
+      console.log('Novo código de login enviado:', codigoCorretoLogin);
+      alert('Código reenviado para seu e-mail!');
+    });
+
+    // Cadastro flow
+    enviarCodigo.addEventListener('click', () => {
+      const email = emailCadastro.value.trim();
+      
+      if (!email) {
+        emailError.textContent = 'Por favor, digite um e-mail.';
+        emailError.style.display = 'block';
+        return;
+      }
+
+      if (!validarEmail(email)) {
+        emailError.textContent = 'Este e-mail não é válido.';
+        emailError.style.display = 'block';
+        return;
+      }
+
+      emailError.style.display = 'none';
+      
+      // Simular envio de código
+      codigoCorreto = gerarCodigo();
+      console.log('Código enviado:', codigoCorreto);
+      
+      cadastroScreen.style.display = 'none';
+      verificacaoScreen.style.display = 'block';
+    });
+
+    verificarCodigo.addEventListener('click', () => {
+      const codigoDigitado = codigoVerificacao.value.trim();
+      
+      if (!codigoDigitado) {
+        codigoError.textContent = 'Por favor, digite o código.';
+        codigoError.style.display = 'block';
+        return;
+      }
+
+      if (codigoDigitado !== codigoCorreto) {
+        codigoError.textContent = 'Código incorreto. Tente novamente.';
+        codigoError.style.display = 'block';
+        return;
+      }
+
+      codigoError.style.display = 'none';
+      
+      // Código correto - ir para tela de integração
+      document.querySelector('.container-fluid').style.display = 'none';
+      integracaoScreen.style.display = 'block';
+    });
+
+    reenviarCodigo.addEventListener('click', (e) => {
+      e.preventDefault();
+      codigoCorreto = gerarCodigo();
+      console.log('Novo código enviado:', codigoCorreto);
+      alert('Código reenviado para seu e-mail!');
+    });
+
+    
+
+    // Escolhas na tela de integração
+    escolhaArtista.addEventListener('click', () => {
+      localStorage.setItem('emailUsuario', emailCadastro.value.trim());
+      window.location.href = 'EditarPerfilArtista.html';
+    });
+
+    escolhaCliente.addEventListener('click', () => {
+      localStorage.setItem('emailUsuario', emailCadastro.value.trim());
+      window.location.href = 'EditarPerfilUsuario.html';
+    });
+
+    // Permitir apenas números nos campos de código
+    codigoVerificacao.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    });
+
+    codigoVerificacaoLogin.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    });
+
+    // Esconder mensagens de erro quando o usuário digita
+    emailLogin.addEventListener('input', () => {
+      emailLoginError.style.display = 'none';
+    });
+
+    emailCadastro.addEventListener('input', () => {
+      emailError.style.display = 'none';
+    });
+
+    codigoVerificacao.addEventListener('input', () => {
+      codigoError.style.display = 'none';
+    });
+
+    codigoVerificacaoLogin.addEventListener('input', () => {
+      codigoLoginError.style.display = 'none';
+    });
+
+    
+  </script>
+
+</body>
+</html>
